@@ -1,0 +1,12 @@
+延时队列demo
+1、TTL+DLX (消息过期时间+死信队列)
+https://www.codetd.com/article/12076559
+https://blog.csdn.net/qq_39794062/article/details/118180618
+2、基于延迟插件实现延迟队列
+https://blog.csdn.net/u010404909/article/details/125329160
+https://blog.csdn.net/m0_58440053/article/details/124474915
+https://blog.csdn.net/qq_39794062/article/details/118180618
+3、消息队列手动确认Ack
+https://blog.csdn.net/vtopqx/article/details/104019115?
+4、rabbitmq 配置
+https://www.cnblogs.com/codingmode/p/15696579.html
