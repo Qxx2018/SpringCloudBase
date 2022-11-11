@@ -1,0 +1,57 @@
+sc:
+  env: dev
+  nacos:
+    server-addr: 192.168.237.129:8848
+    namespace: 500926bd-3541-4fc0-976d-8a36102a7591
+    group: SC_GROUP_C
+  redis:
+    host: 192.168.237.129
+    port: 6379
+    database: 5
+    password: redisuser
+  #gateway-url网关路径配置文件
+  gateway:
+    dynamic-route:
+      data-id: 'gateway-router.json'
+      group: 'GATEWAY_C'
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: ${sc.nacos.server-addr}
+        group: ${sc.nacos.group}
+        namespace: ${sc.nacos.namespace}
+        prefix: sc-gateway-config
+        file-extension: yaml
+        shared-configs[0]:
+          data-id: whitelist.yaml
+          group: DEFAULT_GROUP
+          refresh: true
+        shared-configs[1]:
+          data-id: mybatis.yaml
+          group: DEFAULT_GROUP
+          refresh: true
+        shared-configs[2]:
+          data-id: application.yaml
+          group: DEFAULT_GROUP
+          refresh: true
+        shared-configs[3]:
+          data-id: feign.yaml
+          group: DEFAULT_GROUP
+          refresh: true
+        shared-configs[4]:
+          data-id: ribbon.yaml
+          group: DEFAULT_GROUP
+          refresh: true
+        shared-configs[5]:
+          data-id: Jwt.yaml
+          group: DEFAULT_GROUP
+          refresh: true
+        shared-configs[6]:
+          data-id: redis.yaml
+          group: DEFAULT_GROUP
+          refresh: true
+      discovery:
+        server-addr: ${sc.nacos.server-addr}
+        group: ${sc.nacos.group}
+        namespace: ${sc.nacos.namespace}

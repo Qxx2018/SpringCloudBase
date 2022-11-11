@@ -1,0 +1,22 @@
+server:
+  port: 9310
+spring:
+  profiles:
+    active: dev
+  application:
+    name: gateway-service
+  cloud:
+    #网关
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+    #负载均衡
+    loadbalancer:
+      ribbon:
+        enabled: true
+logging:
+  level:
+    root: info
+  config: classpath:log/logback-spring_${sc.env}.xml

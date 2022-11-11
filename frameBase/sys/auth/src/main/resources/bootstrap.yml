@@ -1,5 +1,5 @@
 server:
-  port: 81
+  port: 9544
 mybatis-plus:
   mapper-locations: classpath:com/itheima/**/mapper/*Mapper.xml
   #实体扫描，多个package用逗号分割
