@@ -1,5 +1,10 @@
 server:
   port: 9544
+spring:
+  profiles:
+    active: dev
+  application:
+    name: auth-service
 mybatis-plus:
   mapper-locations: classpath:com/itheima/**/mapper/*Mapper.xml
   #实体扫描，多个package用逗号分割
@@ -8,9 +13,6 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     cache-enabled: false
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-spring:
-  profiles:
-    active: dev
 logging:
   level:
     root: info

@@ -6,6 +6,15 @@ sc:
       password: root
       db: sys
   env: dev
+  nacos:
+    server-addr: 192.168.237.129:8848
+    namespace: 500926bd-3541-4fc0-976d-8a36102a7591
+    group: SC_GROUP_C
+  redis:
+    host: 192.168.237.129
+    port: 6379
+    database: 5
+    password: redisuser
 spring:
   datasource:
     mysql:
@@ -13,27 +22,34 @@ spring:
       jdbc-url: jdbc:mysql://${sc.datasource.mysql.ip}/${sc.datasource.mysql.db}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
       username: ${sc.datasource.mysql.username}
       password: ${sc.datasource.mysql.password}
-  rabbitmq:
-    addresses: 192.168.237.129
-    port: 5672
-    username: qxx
-    password: qxx
-    #连接到代理时用的虚拟主机
-    virtual-host: /
-    #是否启用发布确认
-    publisher-returns: false
-    #异步回调
-    publisher-confirm-type: correlated
-    #心跳时间 s
-    requested-heartbeat: 60
-    #连接超时 ms 队列属性设置 与 消息进行单独设置 => 以两者之间TTL较小的那个数值为准
-    connection-timeout: 300000
-    #Template
-    template:
-      #启用强制信息
-      mandatory: true
-    #linstener
-    listener:
-      simple:
-        #手动设置ack
-        acknowledge-mode: manual
+  cloud:
+    nacos:
+      config:
+        server-addr: ${sc.nacos.server-addr}
+        group: ${sc.nacos.group}
+        namespace: ${sc.nacos.namespace}
+        prefix: sc-auth-config
+        file-extension: yaml
+        shared-configs:
+          - dataId: application.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+          - dataId: redis.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+          - dataId: mq.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+          - dataId: mybatis.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+          - dataId: ribbon.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+          - dataId: feign.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+      discovery:
+        server-addr: ${sc.nacos.server-addr}
+        group: ${sc.nacos.group}
+        namespace: ${sc.nacos.namespace}

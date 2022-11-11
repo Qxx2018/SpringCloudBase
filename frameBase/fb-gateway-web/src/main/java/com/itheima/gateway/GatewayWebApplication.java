@@ -15,7 +15,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableConfigurationProperties
 public class GatewayWebApplication {
     public static void main(String[] args) {
-        System.setProperty("nacos.logging.default.config.enabled","false");
         SpringApplication.run(GatewayWebApplication.class,args);
         System.out.println("=======================GatewayWebApplication Srart ==================================");
     }
