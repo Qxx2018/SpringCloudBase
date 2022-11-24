@@ -1,0 +1,25 @@
+seata:
+  enable: true
+  #开启数据库代理
+  enableAutoDataSourceProxy: true
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      group: DEFAULT_GROUP
+      server-addr: 192.168.237.129:8848
+      namespace: 67076c4b-fc89-4571-a612-4f9e4f0cfa77
+  config:
+    type: nacos
+    nacos:
+      group: SEATA_GROUP
+      server-addr: 192.168.237.129:8848
+      namespace: 67076c4b-fc89-4571-a612-4f9e4f0cfa77
+  service:
+    grouplist:
+      default: 192.168.237.129:8091
+  client:
+    rm:
+      report-success-enable: false
+
+

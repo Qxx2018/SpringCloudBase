@@ -1,0 +1,55 @@
+sc:
+  datasource:
+    mysql:
+      ip: 192.168.237.129:3306
+      username: root
+      password: root
+      db: sys
+  env: dev
+  nacos:
+    server-addr: 192.168.237.129:8848
+    namespace: 500926bd-3541-4fc0-976d-8a36102a7591
+    group: SC_GROUP_C
+  redis:
+    host: 192.168.237.129
+    port: 6379
+    database: 5
+    password: redisuser
+spring:
+  datasource:
+    mysql:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://${sc.datasource.mysql.ip}/${sc.datasource.mysql.db}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
+      username: ${sc.datasource.mysql.username}
+      password: ${sc.datasource.mysql.password}
+  cloud:
+    nacos:
+      config:
+        server-addr: ${sc.nacos.server-addr}
+        group: ${sc.nacos.group}
+        namespace: ${sc.nacos.namespace}
+        prefix: sc-auth-config
+        file-extension: yaml
+        shared-configs:
+          - dataId: application.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+          - dataId: redis.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+          - dataId: mq.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+          - dataId: mybatis.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+          - dataId: ribbon.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+          - dataId: feign.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+      discovery:
+        server-addr: ${sc.nacos.server-addr}
+        group: ${sc.nacos.group}
+        namespace: ${sc.nacos.namespace}

@@ -1,0 +1,9 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  servlet:
+    multipart:
+      enabled: true #默认支持文件上传
+      file-size-threshold: 0 #文件写入磁盘后的阈值
+      max-file-size: 100MB #单个文件限制
+      max-request-size: 200MB # 请求总文件大小限制

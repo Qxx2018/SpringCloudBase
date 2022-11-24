@@ -1,0 +1,13 @@
+spring:
+  redis:
+    database: ${sc.redis.database}
+    host: ${sc.redis.host}
+    port: ${sc.redis.port}
+    password: ${sc.redis.password}
+    timeout: 30000
+    lettuce:
+      pool:
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0

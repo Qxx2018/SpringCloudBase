@@ -1,6 +1,6 @@
 package com.itheima.sys.auth.controller;
 
-import com.itheima.common.coredata.rsp.Rsp;
+import com.itheima.common.vo.Rsp;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

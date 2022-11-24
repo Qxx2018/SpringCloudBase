@@ -1,0 +1,15 @@
+[
+  {
+    "id":"sys-auth-api",
+    "order": 0,
+    "predicates": [
+      {
+        "args": {
+          "pattern": "/ssa/**"
+        },
+        "name": "Path"
+      }
+    ],
+    "uri": "lb://auth-service"
+  }
+]

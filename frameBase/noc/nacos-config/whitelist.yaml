@@ -1,0 +1,4 @@
+sc:
+  whiteList:
+    urls:
+      - "/auth/ssa/login"

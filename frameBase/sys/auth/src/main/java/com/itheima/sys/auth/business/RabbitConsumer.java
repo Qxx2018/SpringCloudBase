@@ -1,7 +1,7 @@
 package com.itheima.sys.auth.business;
 
-import com.itheima.common.systools.mq.DelayedQueueConfig;
-import com.itheima.common.systools.mq.TtlQueueConfig;
+import com.itheima.sys.auth.config.mq.DelayedQueueConfig;
+import com.itheima.sys.auth.config.mq.TtlQueueConfig;
 import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
