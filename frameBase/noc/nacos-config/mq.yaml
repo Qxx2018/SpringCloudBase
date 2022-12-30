@@ -1,25 +1,25 @@
 spring:
   rabbitmq:
-  addresses: 192.168.237.129
-  port: 5672
-  username: qxx
-  password: qxx
-  #连接到代理时用的虚拟主机
-  virtual-host: /
-  #是否启用发布确认
-  publisher-returns: false
-  #异步回调
-  publisher-confirm-type: correlated
-  #心跳时间 s
-  requested-heartbeat: 60
-  #连接超时 ms 队列属性设置 与 消息进行单独设置 => 以两者之间TTL较小的那个数值为准
-  connection-timeout: 300000
-  #Template
-  template:
-    #启用强制信息
-    mandatory: true
-  #linstener
-  listener:
-    simple:
-      #手动设置ack
-      acknowledge-mode: manual
+    addresses: 192.168.237.129
+    port: 5672
+    username: qxx
+    password: qxx
+    #连接到代理时用的虚拟主机
+    virtual-host: /
+    #是否启用发布确认
+    publisher-returns: false
+    #异步回调
+    publisher-confirm-type: correlated
+    #心跳时间 s
+    requested-heartbeat: 60
+    #连接超时 ms 队列属性设置 与 消息进行单独设置 => 以两者之间TTL较小的那个数值为准
+    connection-timeout: 300000
+    #Template
+    template:
+      #启用强制信息
+      mandatory: true
+    #linstener
+    listener:
+      simple:
+        #手动设置ack
+        acknowledge-mode: manual
