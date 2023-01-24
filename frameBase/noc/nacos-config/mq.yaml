@@ -1,11 +1,11 @@
 spring:
   rabbitmq:
-    addresses: 192.168.237.129
-    port: 5672
-    username: qxx
-    password: qxx
+    addresses: ${sc.rabbitmq.addresses}
+    port: ${sc.rabbitmq.port}
+    username: ${sc.rabbitmq.username}
+    password: ${sc.rabbitmq.password}
     #连接到代理时用的虚拟主机
-    virtual-host: /
+    virtual-host: ${sc.rabbitmq.virtual-host}
     #是否启用发布确认
     publisher-returns: false
     #异步回调

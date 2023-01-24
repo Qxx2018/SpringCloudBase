@@ -1,0 +1,44 @@
+sc:
+  datasource:
+    mysql:
+      ip: 192.168.237.129:3306
+      username: admin_2023
+      password: adminDK_@2023
+      db: demo
+  env: dev
+  nacos:
+    server-addr: 192.168.237.129:8848
+    namespace: fde895c3-8a36-45ba-af5e-bd7bb32ddc44
+    group: SC_GROUP_C
+  redis:
+    host: 192.168.237.129
+    port: 6379
+    database: 5
+    password: admin55670@redis
+  rabbitmq:
+    addresses: 192.168.237.129
+    port: 5672
+    username: qxx
+    password: qxx
+    #连接到代理时用的虚拟主机
+    virtual-host: /
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: ${sc.nacos.server-addr}
+        group: ${sc.nacos.group}
+        namespace: ${sc.nacos.namespace}
+        prefix: sc-auth-config
+        file-extension: yaml
+        shared-configs:
+          - dataId: application.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+          - dataId: mq.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+      discovery:
+        server-addr: ${sc.nacos.server-addr}
+        group: ${sc.nacos.group}
+        namespace: ${sc.nacos.namespace}
