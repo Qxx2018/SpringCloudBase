@@ -22,6 +22,8 @@ sc:
     password: qxx
     #连接到代理时用的虚拟主机
     virtual-host: /
+    # 生产者|消费者分组（保持一致）
+    group: msg-group
 spring:
   cloud:
     nacos:
@@ -42,3 +44,28 @@ spring:
         server-addr: ${sc.nacos.server-addr}
         group: ${sc.nacos.group}
         namespace: ${sc.nacos.namespace}
+    stream:
+      binders: # 在这里配置要绑定的rabbitmq的服务信息
+        myRabbit: # 表示定义的名称，用于于binding整合
+          type: rabbit #消息组件类型
+          inheritEnvironment: true #配置是否继承应用程序本身的环境
+          environment: #表示定义的名称，用于于binding整合
+            spring:
+              rabbitmq:
+                host: ${sc.rabbitmq.addresses}
+                port: ${sc.rabbitmq.port}
+                username: ${sc.rabbitmq.username}
+                password: ${sc.rabbitmq.password}
+                virtual-host: ${sc.rabbitmq.virtual-host}
+          defaultCandidate: true
+      bindings: #服务整合处理
+        msg-channel-output: #输出通道的名称
+          destination: msg-exchange #输出通道绑定到msg-exchange交换机
+          group: ${sc.rabbitmq.group} #分组名称，生产端和消费端需要一致
+          contentType: application/json # 内容格式
+          default-binder: myRabbit # 设置要绑定的消息服务的具体设置
+        msg-channel-input: #输入通道名称
+          destination: msg-exchange
+          group: ${sc.rabbitmq.group}
+          ontentType: application/json
+          default-binder: myRabbit

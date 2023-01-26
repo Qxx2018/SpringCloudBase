@@ -23,3 +23,12 @@ spring:
       simple:
         #手动设置ack
         acknowledge-mode: manual
+        concurrency: 3 #消费者最小数量
+        max-concurrency: 10 # 消费者最大数量
+        retry:
+          #开启消费重试
+          enabled: true
+          #重试三次
+          max-attempts: 3
+          #间隔时间
+          initial-interval: 5000

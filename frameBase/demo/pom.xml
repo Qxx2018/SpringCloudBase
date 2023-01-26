@@ -40,11 +40,6 @@
             <artifactId>nacos-client</artifactId>
             <version>${nacos-client.version}</version>
         </dependency>
-        <!-- 方便的在 SpringBoot 中使用RabbitMQ       -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
-        </dependency>
         <!--  lombok      -->
         <dependency>
             <groupId>org.projectlombok</groupId>
