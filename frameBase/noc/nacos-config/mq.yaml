@@ -25,6 +25,7 @@ spring:
         acknowledge-mode: manual
         concurrency: 3 #消费者最小数量
         max-concurrency: 10 # 消费者最大数量
+        prefetch: 1 #一个消费者最多可处理的nack消息（消费者拒绝或处理异常的无法处理的消息）数量，如果有事务的话，必须大于等于transaction数量.
         retry:
           #开启消费重试
           enabled: true
@@ -32,3 +33,5 @@ spring:
           max-attempts: 3
           #间隔时间
           initial-interval: 5000
+        # 被拒绝的消息是否重新入队；默认是true
+        default-requeue-rejected: true

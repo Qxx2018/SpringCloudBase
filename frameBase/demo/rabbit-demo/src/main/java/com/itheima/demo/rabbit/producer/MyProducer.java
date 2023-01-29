@@ -1,7 +1,7 @@
 package com.itheima.demo.rabbit.producer;
 
 import com.alibaba.fastjson.JSONObject;
-import com.itheima.demo.rabbit.channel.MyChannel;
+import com.itheima.demo.rabbit.channels.MyChannel;
 import com.itheima.demo.rabbit.dto.PayLoadDTO;
 import com.itheima.demo.rabbit.enums.ActionEnum;
 import lombok.extern.slf4j.Slf4j;

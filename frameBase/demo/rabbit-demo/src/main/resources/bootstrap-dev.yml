@@ -69,3 +69,12 @@ spring:
           group: ${sc.rabbitmq.group}
           ontentType: application/json
           default-binder: myRabbit
+        a-channel-output:
+          destination: a-exchange #输出通道绑定到a-exchange交换机
+          contentType: application/json # 内容格式
+          default-binder: myRabbit # 设置要绑定的消息服务的具体设置
+        a-channel-input:
+          destination: a-exchange #输出通道绑定到a-exchange交换机
+          contentType: application/json # 内容格式
+          default-binder: myRabbit # 设置要绑定的消息服务的具体设置
+            
