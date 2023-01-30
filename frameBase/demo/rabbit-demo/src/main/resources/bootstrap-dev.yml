@@ -69,12 +69,19 @@ spring:
           group: ${sc.rabbitmq.group}
           ontentType: application/json
           default-binder: myRabbit
-        a-channel-output:
-          destination: a-exchange #输出通道绑定到a-exchange交换机
-          contentType: application/json # 内容格式
-          default-binder: myRabbit # 设置要绑定的消息服务的具体设置
-        a-channel-input:
-          destination: a-exchange #输出通道绑定到a-exchange交换机
-          contentType: application/json # 内容格式
-          default-binder: myRabbit # 设置要绑定的消息服务的具体设置
-            
+      rabbit:
+        bindings:
+          msg-channel-output:
+            producer:
+              declareExchange: true # 对于通道终点是否声明交换机
+              exchangeAutoDelete: false #交换机是否自动删除
+              exchangeDurable: true #交换机持久化
+              exchangeType: direct #交换机类型
+              bindingRoutingKey: a-key
+          msg-channel-input:
+            consumer:
+              declareExchange: true # 对于通道终点是否声明交换机
+              exchangeAutoDelete: false #交换机是否自动删除
+              exchangeDurable: true #交换机持久化
+              exchangeType: direct #交换机类型
+              bindingRoutingKey: a-key
