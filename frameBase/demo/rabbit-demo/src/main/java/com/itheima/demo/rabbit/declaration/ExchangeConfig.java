@@ -17,7 +17,11 @@ public class ExchangeConfig {
      */
     public static final String A_EXCHANGE = "a-exchange";
     /**
-     * 声明直连交换机的bean， 该bean名称为：aExchange
+     * 死信交换机dle_a
+     */
+    public static final String A_DEAD_LETTER_EXCHANGE = "a-dead-letter-exchange";
+    /**
+     * 声明直连交换机的bean， 该bean名称为：a-exchange
      * AbstractExchange(String name, boolean durable, boolean autoDelete)
      * this(name, true, false);
      * 默认情况下，交换机是持久化，且不会自动删除
@@ -36,6 +40,17 @@ public class ExchangeConfig {
          */
         return new DirectExchange(
                 A_EXCHANGE,
+                true,
+                false,
+                otherArguments
+        );
+    }
+
+    @Bean(A_DEAD_LETTER_EXCHANGE)
+    public DirectExchange aDeadLetterExchange() {
+        Map<String, Object> otherArguments = new HashMap<>(1);
+        return new DirectExchange(
+                A_DEAD_LETTER_EXCHANGE,
                 true,
                 false,
                 otherArguments
