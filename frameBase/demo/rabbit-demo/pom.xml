@@ -8,13 +8,21 @@
         <version>F-V1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <packaging>jar</packaging>
     <artifactId>rabbit-demo</artifactId>
+    <properties>
+        <spring-boot-maven-plugin.version>2.3.11.RELEASE</spring-boot-maven-plugin.version>
+    </properties>
     <dependencies>
         <!-- spring-boot-starter-web       -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!--   amqp-client     -->
+        <dependency>
+            <groupId>com.rabbitmq</groupId>
+            <artifactId>amqp-client</artifactId>
         </dependency>
         <!-- 方便的在 SpringBoot 中使用RabbitMQ       -->
         <dependency>
@@ -43,13 +51,46 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <!--打包环境配置：开发环境、测试环境、正式环境-->
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <env>dev</env>
+            </properties>
+            <!--未指定环境时，默认打包dev环境-->
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <env>test</env>
+            </properties>
+        </profile>
+        <profile>
+            <id>product</id>
+            <properties>
+                <env>product</env>
+            </properties>
+        </profile>
+    </profiles>
     <build>
-        <!-- 这个插件，可以将应用打包成一个可执行的jar包；-->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
+
 </project>

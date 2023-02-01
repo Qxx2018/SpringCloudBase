@@ -31,8 +31,8 @@ spring:
           #开启消费重试
           enabled: true
           #重试三次
-          max-attempts: 3
-          #间隔时间
+          max-attempts: 5
+          #间隔时间ms
           initial-interval: 5000
         # 被拒绝的消息是否重新入队；默认是true
-        default-requeue-rejected: false
+        default-requeue-rejected: true

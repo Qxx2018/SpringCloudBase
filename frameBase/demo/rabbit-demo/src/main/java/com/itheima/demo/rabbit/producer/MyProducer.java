@@ -5,6 +5,7 @@ import com.itheima.demo.rabbit.channels.MyChannel;
 import com.itheima.demo.rabbit.dto.PayLoadDTO;
 import com.itheima.demo.rabbit.enums.ActionEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
@@ -22,9 +23,11 @@ public class MyProducer {
 
     @Resource
     private MyChannel myChannel;
+    @Resource
+    private RabbitTemplate rabbitTemplate;
 
     /**
-     * 测试消息生产
+     * 测试消息生产A
      */
     public void testPushToMq() {
         PayLoadDTO<String> payLoadDTO =
@@ -39,4 +42,6 @@ public class MyProducer {
         myChannel.output().send(message);
 
     }
+
+
 }

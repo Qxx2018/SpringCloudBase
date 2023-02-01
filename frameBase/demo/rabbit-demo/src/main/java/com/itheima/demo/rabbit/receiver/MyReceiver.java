@@ -30,4 +30,5 @@ public class MyReceiver {
         log.info("消息队列数据"+payLoadDTO.getData());
         throw new RabbitMQException("消息消费异常");
     }
+
 }

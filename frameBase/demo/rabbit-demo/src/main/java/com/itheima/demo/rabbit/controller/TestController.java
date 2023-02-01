@@ -15,6 +15,8 @@ import javax.annotation.Resource;
 @RequestMapping("/middleware/rabbitmq/test")
 @Slf4j
 public class TestController {
+//    @Resource
+//    private BProducer bProducer;
     @Resource
     private MyProducer myProducer;
     @GetMapping("/push")
@@ -22,4 +24,9 @@ public class TestController {
         myProducer.testPushToMq();
         return Boolean.TRUE;
     }
+//    @GetMapping("/pushB")
+//    public Boolean pushB() {
+//        bProducer.testPushToMqB();
+//        return Boolean.TRUE;
+//    }
 }

@@ -16,7 +16,7 @@ sc:
     database: 5
     password: admin55670@redis
   rabbitmq:
-    addresses: 192.168.237.129
+    addresses: 127.0.0.1
     port: 5672
     username: qxx
     password: qxx
@@ -45,30 +45,30 @@ spring:
         group: ${sc.nacos.group}
         namespace: ${sc.nacos.namespace}
     stream:
-      binders: # 在这里配置要绑定的rabbitmq的服务信息
-        myRabbit: # 表示定义的名称，用于于binding整合
-          type: rabbit #消息组件类型
-          inheritEnvironment: true #配置是否继承应用程序本身的环境
-          environment: #表示定义的名称，用于于binding整合
-            spring:
-              rabbitmq:
-                host: ${sc.rabbitmq.addresses}
-                port: ${sc.rabbitmq.port}
-                username: ${sc.rabbitmq.username}
-                password: ${sc.rabbitmq.password}
-                virtual-host: ${sc.rabbitmq.virtual-host}
-          defaultCandidate: true
+#      binders: # 在这里配置要绑定的rabbitmq的服务信息
+#        myRabbit: # 表示定义的名称，用于于binding整合
+#          type: rabbit #消息组件类型
+#          inheritEnvironment: true #配置是否继承应用程序本身的环境
+#          defaultCandidate: true
+#          environment: #表示定义的名称，用于于binding整合
+#            spring:
+#              rabbitmq:
+#                host: ${sc.rabbitmq.addresses}
+#                port: ${sc.rabbitmq.port}
+#                username: ${sc.rabbitmq.username}
+#                password: ${sc.rabbitmq.password}
+#                virtual-host: ${sc.rabbitmq.virtual-host}
       bindings: #服务整合处理
         msg-channel-output: #输出通道的名称
           destination: a-msg-exchange #输出通道绑定到msg-exchange交换机
           group: ${sc.rabbitmq.group} #分组名称，生产端和消费端需要一致
           contentType: application/json # 内容格式
-          default-binder: myRabbit # 设置要绑定的消息服务的具体设置
+#          default-binder: myRabbit # 设置要绑定的消息服务的具体设置
         msg-channel-input: #输入通道名称
           destination: a-msg-exchange
           group: ${sc.rabbitmq.group}
           ontentType: application/json
-          default-binder: myRabbit
+#          default-binder: myRabbit
       rabbit:
         bindings:
           msg-channel-output:
@@ -83,7 +83,7 @@ spring:
               declareDlx: true #声明死信交换机
               deadLetterExchange: a-msg-dead-exchange #死信交换机名称
               deadLetterExchangeType: topic #死信交换机类型
-              requeueRejected: false #消费出错或拒绝消费时，消息不重新排队
+              requeueRejected: true #消费出错或拒绝消费时，消息不重新排队
               republishToDlq: true
           msg-channel-input:
             consumer:
@@ -97,5 +97,5 @@ spring:
               declareDlx: true #声明死信交换机
               deadLetterExchange: a-msg-dead-exchange #死信交换机名称
               deadLetterExchangeType: topic #死信交换机类型
-              requeueRejected: false #消费出错或拒绝消费时，消息不重新排队
+              requeueRejected: true #消费出错或拒绝消费时，消息不重新排队
               republishToDlq: true
