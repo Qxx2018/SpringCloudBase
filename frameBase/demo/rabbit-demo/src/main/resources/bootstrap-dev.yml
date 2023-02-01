@@ -60,12 +60,12 @@ spring:
           defaultCandidate: true
       bindings: #服务整合处理
         msg-channel-output: #输出通道的名称
-          destination: msg-exchange #输出通道绑定到msg-exchange交换机
+          destination: a-msg-exchange #输出通道绑定到msg-exchange交换机
           group: ${sc.rabbitmq.group} #分组名称，生产端和消费端需要一致
           contentType: application/json # 内容格式
           default-binder: myRabbit # 设置要绑定的消息服务的具体设置
         msg-channel-input: #输入通道名称
-          destination: msg-exchange
+          destination: a-msg-exchange
           group: ${sc.rabbitmq.group}
           ontentType: application/json
           default-binder: myRabbit
@@ -73,15 +73,29 @@ spring:
         bindings:
           msg-channel-output:
             producer:
-              declareExchange: true # 对于通道终点是否声明交换机
-              exchangeAutoDelete: false #交换机是否自动删除
+              declareExchange: true #对于通道终点是否声明交换机
+              exchangeAutoDelete: true #交换机是否自动删除
               exchangeDurable: true #交换机持久化
-              exchangeType: direct #交换机类型
-              bindingRoutingKey: a-key
+              exchangeType: topic #交换机类型
+              bindQueue: true #是否声明队列并绑定到目的地交换机
+              autoBindDlq: true #绑定死信队列
+              deadLetterQueueName: a-msg-dead-queue.${sc.rabbitmq.group} #死信队列名称
+              declareDlx: true #声明死信交换机
+              deadLetterExchange: a-msg-dead-exchange #死信交换机名称
+              deadLetterExchangeType: topic #死信交换机类型
+              requeueRejected: false #消费出错或拒绝消费时，消息不重新排队
+              republishToDlq: true
           msg-channel-input:
             consumer:
-              declareExchange: true # 对于通道终点是否声明交换机
-              exchangeAutoDelete: false #交换机是否自动删除
+              declareExchange: true #对于通道终点是否声明交换机
+              exchangeAutoDelete: true #交换机是否自动删除
               exchangeDurable: true #交换机持久化
-              exchangeType: direct #交换机类型
-              bindingRoutingKey: a-key
+              exchangeType: topic #交换机类型
+              bindQueue: true #是否声明队列并绑定到目的地交换机
+              autoBindDlq: true #绑定死信队列
+              deadLetterQueueName: a-msg-dead-queue.${sc.rabbitmq.group} #死信队列名称
+              declareDlx: true #声明死信交换机
+              deadLetterExchange: a-msg-dead-exchange #死信交换机名称
+              deadLetterExchangeType: topic #死信交换机类型
+              requeueRejected: false #消费出错或拒绝消费时，消息不重新排队
+              republishToDlq: true

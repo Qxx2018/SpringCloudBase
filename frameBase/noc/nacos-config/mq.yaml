@@ -20,6 +20,7 @@ spring:
       mandatory: true
     #linstener
     listener:
+      type: simple
       simple:
         #手动设置ack
         acknowledge-mode: manual
@@ -34,4 +35,4 @@ spring:
           #间隔时间
           initial-interval: 5000
         # 被拒绝的消息是否重新入队；默认是true
-        default-requeue-rejected: true
+        default-requeue-rejected: false
