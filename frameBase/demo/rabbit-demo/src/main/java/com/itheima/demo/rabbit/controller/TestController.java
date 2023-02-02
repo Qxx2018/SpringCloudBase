@@ -1,6 +1,6 @@
 package com.itheima.demo.rabbit.controller;
 
-import com.itheima.demo.rabbit.producer.MyProducer;
+import com.itheima.demo.rabbit.producer.BProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,18 +15,28 @@ import javax.annotation.Resource;
 @RequestMapping("/middleware/rabbitmq/test")
 @Slf4j
 public class TestController {
-//    @Resource
-//    private BProducer bProducer;
     @Resource
-    private MyProducer myProducer;
-    @GetMapping("/push")
-    public Boolean push() {
-        myProducer.testPushToMq();
-        return Boolean.TRUE;
-    }
-//    @GetMapping("/pushB")
-//    public Boolean pushB() {
-//        bProducer.testPushToMqB();
+    private BProducer bProducer;
+//    @Resource
+//    private MyProducer myProducer;
+//    @GetMapping("/push")
+//    public Boolean push() {
+//        myProducer.testPushToMq();
 //        return Boolean.TRUE;
 //    }
+    @GetMapping("/pushB/add")
+    public Boolean pushBAdd() {
+        bProducer.testPushToMqBAdd();
+        return Boolean.TRUE;
+    }
+    @GetMapping("/pushB2/add")
+    public Boolean pushB2Add() {
+        bProducer.testPushToMqB2Add();
+        return Boolean.TRUE;
+    }
+    @GetMapping("/pushB/deleted")
+    public Boolean pushBDeleted() {
+        bProducer.testPushToMqBDeleted();
+        return Boolean.TRUE;
+    }
 }
