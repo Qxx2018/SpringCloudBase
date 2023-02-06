@@ -56,4 +56,18 @@ public class BProducer {
         );
         log.info("mq 消息推送，消息=>{}", msg);
     }
+    /**
+     * 测试消息生产者B2
+     */
+    public void  testPushToMqB3Add() {
+        String msg = JSONObject.toJSONString(PayLoadDTO.<String>builder()
+                .action(ActionEnum.ADD)
+                .data("添加数据").build());
+        rabbitTemplate.convertAndSend(
+                BaseMQDecConfig.B_EXCHANGE,
+                BaseMQDecConfig.B3_KEY,
+                msg
+        );
+        log.info("mq 消息推送，消息=>{}", msg);
+    }
 }

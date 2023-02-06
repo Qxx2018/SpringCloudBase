@@ -23,25 +23,83 @@ spring:
       type: simple
       simple:
         #是否启动时自动启动容器
-        auto-startup: true
+        #auto-startup: true
         #手动设置ack
-        #auto：消费者根据程序执行正常或者抛出异常来决定是提交ack或者nack
+        #auto：消费者根据程序执行正常或者抛出异常来决定是提交ack或者nack(auto意味着容器会自动应答，除非MessageListener抛出异常，这是默认配置方式。)
         #manual: 手动ack，用户必须手动提交ack或者nack
         #none: 没有ack机制
         acknowledge-mode: manual
         concurrency: 3 #消费者最小数量
         max-concurrency: 10 # 消费者最大数量
         prefetch: 1 #一个消费者最多可处理的nack消息（消费者拒绝或处理异常的无法处理的消息）数量，如果有事务的话，必须大于等于transaction数量.
+        # 重试后是否重新入队；默认是true->重新入队  false->不入队（不想丢弃需要死信队列）
+        default-requeue-rejected: false
         retry:
-          #开启消费重试
+          #是否开启消费者重试（为false时关闭消费者重试，这时消费端代码异常会一直重复收到消息）
           enabled: true
-          #重试五次 重试5次失败之后就会移除该消息
+          #重试五次 重试4次失败之后就会移除该消息
           max-attempts: 5
           #重试初始间隔时间ms
-          initial-interval: 500
+          initial-interval: 3000
           #重试最大间隔时间ms
-          max-interval: 10000
+          #max-interval: 10000
           #间隔时间乘子  间隔时间*乘子=下一次的间隔时间，最大不能超过设置的最大间隔时间
-          multiplier: 2
-        # 被拒绝的消息(包括重试后的)是否重新入队；默认是true->重新入队  false->不入队（不想丢弃需要死信队列）
-        default-requeue-rejected: true
+          #multiplier: 2
+  cloud:
+    stream:
+      binders: # 在这里配置要绑定的rabbitmq的服务信息
+        myRabbit: # 表示定义的名称，用于于binding整合
+          type: rabbit #消息组件类型
+          inheritEnvironment: true #配置是否继承应用程序本身的环境
+          defaultCandidate: true
+          environment: #表示定义的名称，用于于binding整合
+            spring:
+              rabbitmq:
+                host: ${sc.rabbitmq.addresses}
+                port: ${sc.rabbitmq.port}
+                username: ${sc.rabbitmq.username}
+                password: ${sc.rabbitmq.password}
+                virtual-host: ${sc.rabbitmq.virtual-host}
+      bindings: #服务整合处理
+        msg-channel-output: #输出通道的名称
+          destination: a-msg-exchange #输出通道绑定到msg-exchange交换机
+          group: ${sc.rabbitmq.group} #分组名称，生产端和消费端需要一致
+          contentType: application/json # 内容格式
+          default-binder: myRabbit # 设置要绑定的消息服务的具体设置
+        msg-channel-input: #输入通道名称
+          destination: a-msg-exchange
+          group: ${sc.rabbitmq.group}
+          ontentType: application/json
+          default-binder: myRabbit
+      rabbit:
+        bindings:
+          msg-channel-output:
+            producer:
+              declareExchange: true #对于通道终点是否声明交换机
+              exchangeAutoDelete: true #交换机是否自动删除
+              exchangeDurable: true #交换机持久化
+              exchangeType: topic #交换机类型
+              bindQueue: true #是否声明队列并绑定到目的地交换机
+              autoBindDlq: true #绑定死信队列
+              deadLetterQueueName: a-msg-dead-queue.${sc.rabbitmq.group} #死信队列名称
+              declareDlx: true #声明死信交换机
+              deadLetterExchange: a-msg-dead-exchange #死信交换机名称
+              deadLetterExchangeType: topic #死信交换机类型
+              #当retry被禁用或republishToDlq为false时，传递失败是否应该重新排队
+              requeueRejected: true # 被拒绝的消息(包括重试后的)是否重新入队；默认是true->重新入队  false->不入队（不想丢弃需要死信队列）
+              republishToDlq: true
+          msg-channel-input:
+            consumer:
+              declareExchange: true #对于通道终点是否声明交换机
+              exchangeAutoDelete: true #交换机是否自动删除
+              exchangeDurable: true #交换机持久化
+              exchangeType: topic #交换机类型
+              bindQueue: true #是否声明队列并绑定到目的地交换机
+              autoBindDlq: true #绑定死信队列
+              deadLetterQueueName: a-msg-dead-queue.${sc.rabbitmq.group} #死信队列名称
+              declareDlx: true #声明死信交换机
+              deadLetterExchange: a-msg-dead-exchange #死信交换机名称
+              deadLetterExchangeType: topic #死信交换机类型
+              #当retry被禁用或republishToDlq为false时，传递失败是否应该重新排队
+              requeueRejected: true # 被拒绝的消息(包括重试后的)是否重新入队；默认是true->重新入队  false->不入队（不想丢弃需要死信队列）
+              republishToDlq: true

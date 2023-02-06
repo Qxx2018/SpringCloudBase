@@ -26,6 +26,10 @@ public class BaseMQDecConfig {
      */
     public static final String B2_QUEUE = "b2-queue";
     /**
+     * 队列b3
+     */
+    public static final String B3_QUEUE = "b3-queue";
+    /**
      * 路由b
      */
     public static final String B_KEY = "b-key";
@@ -33,6 +37,10 @@ public class BaseMQDecConfig {
      * 路由b2
      */
     public static final String B2_KEY = "b2-key";
+    /**
+     * 路由b3
+     */
+    public static final String B3_KEY = "b3-key";
     /**
      * 死信交换机b
      */
@@ -96,6 +104,25 @@ public class BaseMQDecConfig {
         return new Queue(B2_QUEUE,true,false,false,args);
     }
     /**
+     * 声明队列B3
+     */
+    @Bean(B3_QUEUE)
+    public Queue b3Queue() {
+        Map<String, Object> args = new HashMap<>(2);
+        //消息的最大存活时间，单位毫秒， 当超过时间后消息会被丢弃
+        //默认消息存活时间为永久存在
+        args.put("x-message-ttl",60000);
+        //消息超出最大数量时，溢出行为： drop-head 或 reject-publish
+        //（drop-head:头部丢弃， reject-publish拒绝生产者发布消息）
+        args.put("x-overflow","reject-publish");
+        //当队列满时，被拒绝的消息，或者消息过期时，将被重新发布到死信交换机上。
+        args.put("x-dead-letter-exchange",B_DEAD_EXCHANGE);
+        //死信路由
+        args.put("x-dead-letter-routing-key",B_DEAD_KEY);
+        //x-max-priority : 队列支持的消息最大优先级数，没设置时，队列不支持消息优先级
+        return new Queue(B3_QUEUE,true,false,false,args);
+    }
+    /**
      * 队列b和交换机b绑定，并指定路由
      */
     @Bean
@@ -108,6 +135,13 @@ public class BaseMQDecConfig {
     @Bean
     public Binding bindB2QueToBExc(@Qualifier(B2_QUEUE) Queue queue,@Qualifier(B_EXCHANGE) TopicExchange topicExchange) {
         return BindingBuilder.bind(queue).to(topicExchange).with(B2_KEY);
+    }
+    /**
+     * 队列b3和交换机b绑定，并指定路由
+     */
+    @Bean
+    public Binding bindB3QueToBExc(@Qualifier(B3_QUEUE) Queue queue,@Qualifier(B_EXCHANGE) TopicExchange topicExchange) {
+        return BindingBuilder.bind(queue).to(topicExchange).with(B3_KEY);
     }
     /**
      * 声明死信交换机B

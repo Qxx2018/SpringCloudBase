@@ -34,6 +34,11 @@ public class TestController {
         bProducer.testPushToMqB2Add();
         return Boolean.TRUE;
     }
+    @GetMapping("/pushB3/add")
+    public Boolean pushB3Add() {
+        bProducer.testPushToMqB3Add();
+        return Boolean.TRUE;
+    }
     @GetMapping("/pushB/deleted")
     public Boolean pushBDeleted() {
         bProducer.testPushToMqBDeleted();

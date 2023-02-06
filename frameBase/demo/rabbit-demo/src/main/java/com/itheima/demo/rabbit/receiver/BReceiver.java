@@ -70,7 +70,7 @@ public class BReceiver {
      */
     @RabbitListener(queues = BaseMQDecConfig.B2_QUEUE)
     public void testHandlerMsgB2(org.springframework.amqp.core.Message message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws RabbitMQException, IOException {
-        log.info("消息消费执行次数=>{}",count);
+        log.info("消息消费第{}次执行",count);
         //代码中不能使用try/catch捕获异常，否则重试机制失效,需要在catch中throw异常触发重试机制
         try {
             String msg = new String(message.getBody());
@@ -81,23 +81,53 @@ public class BReceiver {
 
             //TODO 制造异常
             int i =1/0;
-
             log.info("消息手动应答");
             channel.basicAck(tag,false);
+
         }
         catch (Exception e) {
             //TODO 在catch中throw异常触发重试机制
             log.error("消费异常=>{},{}",e.getMessage(),"触发重试机制");
             log.info("在catch中throw异常触发重试机制");
-            count++;
             throw e;
         }
         finally {
-            if (count == 6) {
+            if (count == 5) {
                 log.info("重试次数到达阈值，消息拒绝，推入死信队列做不差机制");
                 channel.basicReject(tag,false);
             }
+            count++;
         }
+
+    }
+
+    /**
+     * 测试消息3监听
+     * 消息重试机制
+     */
+    @RabbitListener(queues = BaseMQDecConfig.B3_QUEUE)
+    public void testHandlerMsgB3(org.springframework.amqp.core.Message message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws RabbitMQException, IOException {
+        String msg = new String(message.getBody());
+        log.info("mq 消息监听，接受消息=>{}",msg);
+        PayLoadDTO<String> payLoadDTO = JSONObject.parseObject(msg, new TypeReference<PayLoadDTO<String>>() {});
+        log.info("消息队列事件=>{}",payLoadDTO.getAction().toString());
+        log.info("消息队列数据=>{}",payLoadDTO.getData());
+        try {
+            int i =1/0;
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
+            throw e;
+        }
+
+
+
+
+
+
+
+
+
 
     }
 }
