@@ -70,3 +70,5 @@ spring:
           max-interval: 30000
           #间隔时间乘子  间隔时间*乘子=下一次的间隔时间，最大不能超过设置的最大间隔时间
           multiplier: 1
+    publisher-confirm-type: correlated # 发布消息成功到交换器后会触发回调方法
+    publisher-returns: true #回退配置

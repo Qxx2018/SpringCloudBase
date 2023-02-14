@@ -50,7 +50,7 @@ public class BReceiver {
                 //TODO 进行消息处理
                 log.info("-------消息处理");
                 //模拟消费异常
-                throw new RabbitMQException("模拟消费异常");
+                //throw new RabbitMQException("模拟消费异常");
 
             }
             channel.basicAck(tag,false);

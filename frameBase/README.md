@@ -21,3 +21,6 @@
 <br/>2、RabbitMQ提供设置Ack的方法 channel.basicAck(deliveryTag, multiple); channel.basicNack(deliveryTag, multiple, requeue);channel.basicReject(deliveryTag, requeue);
 <br/>3、消息重试机制: 消息消费异常后，通过重试机制，当重试次数超过规定的值时推入死信队列，处理死信队列进行补偿 (如何既保证重试又能不丢失消息)
 <br/>4、https://www.yuque.com/qianxinxing/ga4iqn/xkgrkyhve3dr4vxw
+<br/>==========================<br/>
+2023.02.14
+<br/>1、rabbitmq 消息发布确认和消息回退
