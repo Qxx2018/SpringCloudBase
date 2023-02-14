@@ -28,7 +28,7 @@ public class BReceiver {
      * 测试消息监听
      * 消息手动ack机制
      */
-    @RabbitListener(queues = BaseMQDecConfig.B_QUEUE)
+    @RabbitListener(queues = {BaseMQDecConfig.B_QUEUE})
     public void testHandlerMsgB(org.springframework.amqp.core.Message message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws IOException {
         try {
             String msg = new String(message.getBody());
@@ -130,4 +130,37 @@ public class BReceiver {
 
 
     }
+
+    /**
+     * 监听从备份交换机分派过来的消息
+     */
+    @RabbitListener(queues = BaseMQDecConfig.B_BACKUP_QUEUE)
+    public void testHandlerMsgBBackUp(org.springframework.amqp.core.Message message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws IOException {
+        try {
+            //TODO 处理备份队列中的消息
+            String msg = new String(message.getBody());
+            log.info("==========处理备份队列中的消息");
+            log.info("mq 消息监听，接受消息=>{}",msg);
+            PayLoadDTO<String> payLoadDTO = JSONObject.parseObject(msg, new TypeReference<PayLoadDTO<String>>() {});
+            log.info("消息队列事件=>{}",payLoadDTO.getAction().toString());
+            log.info("消息队列数据=>{}",payLoadDTO.getData());
+            channel.basicAck(tag,false);
+        }
+        catch (Exception e) {
+            //TODO 消费异常后对消息的拒绝
+            log.error("消费异常=>{},{}",e.getMessage(),"消息拒绝");
+            channel.basicReject(tag,false);
+        }
+    }
+
+    /**
+     * 监听报警对列的消息
+     * @param message
+     */
+    @RabbitListener(queues = BaseMQDecConfig.B_WARNING_QUEUE)
+    public void receiveWarningMsg(org.springframework.amqp.core.Message message) {
+        log.info("==========处理报警队列中的消息");
+        log.warn("出现不可路由消息=>{}", message);
+    }
+
 }

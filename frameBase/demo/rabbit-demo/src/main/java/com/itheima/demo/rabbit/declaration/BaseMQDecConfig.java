@@ -54,14 +54,33 @@ public class BaseMQDecConfig {
      */
     public static final String B_DEAD_KEY = "b-dead-key";
     /**
+     * 备份交换机b
+     */
+    public static final String B_BACKUP_EXCHANGE = "b-backup-exchange";
+    /**
+     * 备份队列b
+     */
+    public static final String B_BACKUP_QUEUE = "b-backup-queue";
+    /**
+     * 报警队列b
+     */
+    public static final String B_WARNING_QUEUE = "b-warning-queue";
+    /**
      * 声明主题交换机B
      */
     @Bean(B_EXCHANGE)
     public TopicExchange bExchange() {
+        /**
+         * 此交换机配置了配份交换机，以确保宕机后将消息转发到备份交换机
+         * 或者接收到一条不可路由消息时，将会把这条消息转发到备份交换机中
+         */
+        Map<String, Object> arguments = new HashMap<>(1);
+        arguments.put("alternate-exchange",B_BACKUP_EXCHANGE);
         return new TopicExchange(
                 B_EXCHANGE,
                 true,
-                false
+                false,
+                arguments
         );
     }
     /**
@@ -169,4 +188,60 @@ public class BaseMQDecConfig {
     public Binding bindBDeadQueToBDeadExc(@Qualifier(B_DEAD_QUEUE) Queue queue,@Qualifier(B_DEAD_EXCHANGE) TopicExchange topicExchange) {
         return BindingBuilder.bind(queue).to(topicExchange).with(B_DEAD_KEY);
     }
+
+    /**
+     * 声明备份交换机b
+     * 属于Fanout广播类型:能把所有消息都投递到与其绑定的队列中
+     */
+    @Bean(B_BACKUP_EXCHANGE)
+    public FanoutExchange bBackUpExchange() {
+        return new FanoutExchange(
+                B_BACKUP_EXCHANGE,
+                true,
+                false
+        );
+    }
+    /**
+     * 声明备份队列b
+     */
+    @Bean(B_BACKUP_QUEUE)
+    public Queue bBackUpQueue() {
+        Map<String, Object> args = new HashMap<>(2);
+        //消息的最大存活时间，单位毫秒， 当超过时间后消息会被丢弃
+        //默认消息存活时间为永久存在
+        //10S
+        args.put("x-message-ttl",10000);
+        //消息超出最大数量时，溢出行为： drop-head 或 reject-publish
+        //（drop-head:头部丢弃， reject-publish拒绝生产者发布消息）
+        args.put("x-overflow","reject-publish");
+        //当队列满时，被拒绝的消息，或者消息过期时，将被重新发布到死信交换机上。
+        args.put("x-dead-letter-exchange",B_DEAD_EXCHANGE);
+        //死信路由
+        args.put("x-dead-letter-routing-key",B_DEAD_KEY);
+        //x-max-priority : 队列支持的消息最大优先级数，没设置时，队列不支持消息优先级
+        return new Queue(B_BACKUP_QUEUE,true,false,false,args);
+    }
+    /**
+     * 声明告警队列b
+     */
+    @Bean(B_WARNING_QUEUE)
+    public Queue bWarningQueue() {
+        return new Queue(B_WARNING_QUEUE,false,false,false);
+    }
+    /**
+     * 备份队列b绑定到备份交换机b
+     */
+    @Bean
+    public Binding bindBBackUpQueToBBackUpExc(@Qualifier(B_BACKUP_QUEUE) Queue queue,@Qualifier(B_BACKUP_EXCHANGE) FanoutExchange fanoutExchange) {
+        return BindingBuilder.bind(queue).to(fanoutExchange);
+    }
+    /**
+     * 报警队列b绑定到备份交换机b
+     */
+    @Bean
+    public Binding bindBWarningQueToBBackUpExc(@Qualifier(B_WARNING_QUEUE) Queue queue,@Qualifier(B_BACKUP_EXCHANGE) FanoutExchange fanoutExchange) {
+        return BindingBuilder.bind(queue).to(fanoutExchange);
+    }
+
+
 }
