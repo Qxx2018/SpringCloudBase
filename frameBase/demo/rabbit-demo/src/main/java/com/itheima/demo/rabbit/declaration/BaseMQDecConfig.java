@@ -73,6 +73,7 @@ public class BaseMQDecConfig {
         /**
          * 此交换机配置了配份交换机，以确保宕机后将消息转发到备份交换机
          * 或者接收到一条不可路由消息时，将会把这条消息转发到备份交换机中
+         * 备份交换机比消息回退优先级高
          */
         Map<String, Object> arguments = new HashMap<>(1);
         arguments.put("alternate-exchange",B_BACKUP_EXCHANGE);

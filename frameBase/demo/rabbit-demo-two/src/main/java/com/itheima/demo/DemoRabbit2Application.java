@@ -1,4 +1,4 @@
-package com.itheima.demo.rabbit;
+package com.itheima.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,11 +9,11 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @author 10445
  */
 @EnableDiscoveryClient
-@SpringBootApplication(scanBasePackages = {"com.itheima.demo.rabbit"})
+@SpringBootApplication(scanBasePackages = {"com.itheima.demo.rabbit2"})
 @EnableConfigurationProperties
-public class DemoRabbitApplication {
+public class DemoRabbit2Application {
     public static void main(String[] args) {
-        SpringApplication.run(DemoRabbitApplication.class,args);
-        System.out.println("=======================DemoRabbitApplication Start ==================================");
+        SpringApplication.run(DemoRabbit2Application.class,args);
+        System.out.println("=======================DemoRabbit2Application Start ==================================");
     }
 }

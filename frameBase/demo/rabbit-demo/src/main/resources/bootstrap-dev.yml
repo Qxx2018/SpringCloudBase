@@ -44,7 +44,6 @@ spring:
         server-addr: ${sc.nacos.server-addr}
         group: ${sc.nacos.group}
         namespace: ${sc.nacos.namespace}
-  rabbitmq:
     listener:
       type: simple
       simple:
@@ -53,6 +52,7 @@ spring:
         #manual: 手动ack，用户必须手动提交ack或者nack
         #none: 没有ack机制
         acknowledge-mode: manual
+        #当retry被禁用或republishToDlq为false时，传递失败是否应该重新排队
         #决定被拒绝的消息是否重新入队；默认是true
         #与参数acknowledge-mode有关系，当且仅当消费方模式为auto,且未开启重试机制时生效
         #       acknowledge-mode:auto

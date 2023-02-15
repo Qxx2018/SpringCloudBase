@@ -17,13 +17,6 @@ import javax.annotation.Resource;
 public class TestController {
     @Resource
     private BProducer bProducer;
-//    @Resource
-//    private MyProducer myProducer;
-//    @GetMapping("/push")
-//    public Boolean push() {
-//        myProducer.testPushToMq();
-//        return Boolean.TRUE;
-//    }
     @GetMapping("/pushB/add")
     public Boolean pushBAdd() {
         bProducer.testPushToMqBAdd();

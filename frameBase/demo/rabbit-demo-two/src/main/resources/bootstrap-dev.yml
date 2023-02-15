@@ -1,51 +1,49 @@
-spring:
+sc:
+  datasource:
+    mysql:
+      ip: 192.168.237.129:3306
+      username: admin_2023
+      password: adminDK_@2023
+      db: demo
+  env: dev
+  nacos:
+    server-addr: 192.168.237.129:8848
+    namespace: fde895c3-8a36-45ba-af5e-bd7bb32ddc44
+    group: SC_GROUP_C
+  redis:
+    host: 192.168.237.129
+    port: 6379
+    database: 5
+    password: admin55670@redis
   rabbitmq:
-    addresses: ${sc.rabbitmq.addresses}
-    port: ${sc.rabbitmq.port}
-    username: ${sc.rabbitmq.username}
-    password: ${sc.rabbitmq.password}
+    addresses: 192.168.237.129
+    port: 5672
+    username: qxx
+    password: qxx
     #连接到代理时用的虚拟主机
-    virtual-host: ${sc.rabbitmq.virtual-host}
-    #是否启用发布确认
-    publisher-returns: false
-    #异步回调
-    publisher-confirm-type: correlated
-    #心跳时间 s
-    requested-heartbeat: 60
-    #连接超时 ms 队列属性设置 与 消息进行单独设置 => 以两者之间TTL较小的那个数值为准
-    connection-timeout: 300000
-    #Template
-    template:
-      #启用强制信息
-      mandatory: true
-    #linstener
-    listener:
-      type: simple
-      simple:
-        #是否启动时自动启动容器
-        #auto-startup: true
-        #手动设置ack
-        #auto：消费者根据程序执行正常或者抛出异常来决定是提交ack或者nack(auto意味着容器会自动应答，除非MessageListener抛出异常，这是默认配置方式。)
-        #manual: 手动ack，用户必须手动提交ack或者nack
-        #none: 没有ack机制
-        acknowledge-mode: manual
-        concurrency: 3 #消费者最小数量
-        max-concurrency: 10 # 消费者最大数量
-        prefetch: 1 #一个消费者最多可处理的nack消息（消费者拒绝或处理异常的无法处理的消息）数量，如果有事务的话，必须大于等于transaction数量.
-        # 重试后是否重新入队；默认是true->重新入队  false->不入队（不想丢弃需要死信队列）
-        default-requeue-rejected: false
-        retry:
-          #是否开启消费者重试（为false时关闭消费者重试，这时消费端代码异常会一直重复收到消息）
-          enabled: true
-          #重试五次 重试4次失败之后就会移除该消息
-          max-attempts: 5
-          #重试初始间隔时间ms
-          initial-interval: 3000
-          #重试最大间隔时间ms
-          #max-interval: 10000
-          #间隔时间乘子  间隔时间*乘子=下一次的间隔时间，最大不能超过设置的最大间隔时间
-          #multiplier: 2
+    virtual-host: /
+    # 生产者|消费者分组（保持一致）
+    group: msg-group
+spring:
   cloud:
+    nacos:
+      config:
+        server-addr: ${sc.nacos.server-addr}
+        group: ${sc.nacos.group}
+        namespace: ${sc.nacos.namespace}
+        prefix: sc-auth-config
+        file-extension: yaml
+        shared-configs:
+          - dataId: application.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+          - dataId: mq.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+      discovery:
+        server-addr: ${sc.nacos.server-addr}
+        group: ${sc.nacos.group}
+        namespace: ${sc.nacos.namespace}
     stream:
       binders:
         myRabbit: # 表示定义的名称，用于于binding整合
@@ -96,15 +94,12 @@ spring:
               exchangeDurable: true #交换机持久化
               exchangeType: topic #交换机类型
               bindQueue: true #是否声明队列并绑定到目的地交换机
-              bindingRoutingKey: a-key #用于将队列绑定到交换机的路由键
               declareDlx: true #声明死信交换机
               deadLetterExchange: a-dead-exchange #死信交换机名称
               deadLetterExchangeType: topic #死信交换机类型
-              deadLetterRoutingKey: a-dead-key #队列的DLX路由key
               autoBindDlq: true #绑定死信队列
               deadLetterQueueName: a-dead-queue.${sc.rabbitmq.group} #死信队列名称
               dlqDeadLetterExchange: a-dead-exchange #如果DLQ被声明，则将DLX分配给该队列 如果该列声明，那么deadLetterExchange也要声明，这个保持一致
-              dlqDeadLetterRoutingKey: a-dead-key #如果DLQ被声明，则会将一个死信路由密钥分配给该队列
               republishToDlq: true #该值为false如果设置了死信队列，消息对原封不动的发送到死信队列，如果为true，则消息对带上错误信息发送至死信队列
               requeueRejected: true #默认false，只能抛AmqpRejectAndDontRequeueException消息才能到死信队列，如果为true，所有错误消息都会抛到死信队列
               ttl: 60000 #对列生存时间ms
@@ -116,15 +111,12 @@ spring:
               exchangeDurable: true #交换机持久化
               exchangeType: topic #交换机类型
               bindQueue: true #是否声明队列并绑定到目的地交换机
-              bindingRoutingKey: a-key #用于将队列绑定到交换机的路由键
               declareDlx: true #声明死信交换机
               deadLetterExchange: a-dead-exchange #死信交换机名称
               deadLetterExchangeType: topic #死信交换机类型
-              deadLetterRoutingKey: a-dead-key #队列的DLX路由key
               autoBindDlq: true #绑定死信队列
               deadLetterQueueName: a-dead-queue.${sc.rabbitmq.group} #死信队列名称
               dlqDeadLetterExchange: a-dead-exchange #如果DLQ被声明，则将DLX分配给该队列 如果该列声明，那么deadLetterExchange也要声明，这个保持一致
-              dlqDeadLetterRoutingKey: a-dead-key #如果DLQ被声明，则会将一个死信路由密钥分配给该队列
               republishToDlq: true #该值为false如果设置了死信队列，消息对原封不动的发送到死信队列，如果为true，则消息对带上错误信息发送至死信队列
               requeueRejected: true #默认false，只能抛AmqpRejectAndDontRequeueException消息才能到死信队列，如果为true，所有错误消息都会抛到死信队列
               ttl: 60000 #对列生存时间ms
