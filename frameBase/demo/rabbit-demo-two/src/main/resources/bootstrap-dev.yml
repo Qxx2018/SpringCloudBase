@@ -70,7 +70,6 @@ spring:
           ontentType: application/json
           default-binder: myRabbit
           consumer:
-            #retryTemplateName: #编码方式配置
             # 最多尝试处理几次，默认3
             maxAttempts: 5
             # 重试时初始避退间隔，单位毫秒，默认1000

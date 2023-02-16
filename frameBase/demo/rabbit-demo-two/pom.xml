@@ -14,7 +14,7 @@
         <spring-boot-maven-plugin.version>2.3.11.RELEASE</spring-boot-maven-plugin.version>
     </properties>
     <dependencies>
-        <!-- spring-boot-starter-web       -->
+        <!-- spring.factories-boot-starter-web       -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -29,7 +29,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
-        <!--  spring-cloud-starter-stream-rabbit      -->
+        <!--  spring.factories-cloud-starter-stream-rabbit      -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
