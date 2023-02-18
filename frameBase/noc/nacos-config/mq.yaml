@@ -73,7 +73,7 @@ spring:
           default-binder: myRabbit
           consumer:
             #retryTemplateName: #编码方式配置
-            # 最多尝试处理几次，默认3
+            # 最多尝试处理几次，默认3 ；填写1关闭重试
             maxAttempts: 5
             # 重试时初始避退间隔，单位毫秒，默认1000
             backOffInitialInterval: 1000
@@ -105,12 +105,11 @@ spring:
               deadLetterQueueName: a-dead-queue.${sc.rabbitmq.group} #死信队列名称
               dlqDeadLetterExchange: a-dead-exchange #如果DLQ被声明，则将DLX分配给该队列 如果该列声明，那么deadLetterExchange也要声明，这个保持一致
               dlqDeadLetterRoutingKey: a-dead-key #如果DLQ被声明，则会将一个死信路由密钥分配给该队列
-              republishToDlq: true #该值为false如果设置了死信队列，消息对原封不动的发送到死信队列，如果为true，则消息对带上错误信息发送至死信队列
-              requeueRejected: true #默认false，只能抛AmqpRejectAndDontRequeueException消息才能到死信队列，如果为true，所有错误消息都会抛到死信队列
               ttl: 60000 #对列生存时间ms
               transacted: true #启动事务
           msg-channel-input:
             consumer:
+              acknowledgeMode: MANUAL # 应答模式NONE/MANUAL/AUTO
               declareExchange: true #对于通道终点是否声明交换机
               exchangeAutoDelete: false #交换机是否自动删除
               exchangeDurable: true #交换机持久化
@@ -125,7 +124,7 @@ spring:
               deadLetterQueueName: a-dead-queue.${sc.rabbitmq.group} #死信队列名称
               dlqDeadLetterExchange: a-dead-exchange #如果DLQ被声明，则将DLX分配给该队列 如果该列声明，那么deadLetterExchange也要声明，这个保持一致
               dlqDeadLetterRoutingKey: a-dead-key #如果DLQ被声明，则会将一个死信路由密钥分配给该队列
-              republishToDlq: true #该值为false如果设置了死信队列，消息对原封不动的发送到死信队列，如果为true，则消息对带上错误信息发送至死信队列
-              requeueRejected: true #默认false，只能抛AmqpRejectAndDontRequeueException消息才能到死信队列，如果为true，所有错误消息都会抛到死信队列
+              republishToDlq: true # 默认false 该值为false如果设置了死信队列，消息对原封不动的发送到死信队列，如果为true，则消息对带上错误信息发送至死信队列
+              requeueRejected: true # 默认false 当retry被禁用或republishToDlq为false时，传递失败是否应该重新排队。
               ttl: 60000 #对列生存时间ms
               transacted: true #启动事务

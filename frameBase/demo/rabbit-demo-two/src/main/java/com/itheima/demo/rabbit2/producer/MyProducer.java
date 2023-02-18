@@ -24,9 +24,26 @@ public class MyProducer {
     private MyChannel myChannel;
 
     /**
-     * 测试消息生产A
+     * 测试消息生产 通道1
      */
     public void testPushToMq() {
+
+        PayLoadDTO<String> payLoadDTO =
+                PayLoadDTO.<String>builder()
+                        .action(ActionEnum.ADD)
+                        .data("添加数据"+ System.currentTimeMillis()).build();
+        Message<PayLoadDTO<String>> message = MessageBuilder
+                .withPayload(payLoadDTO)
+                .setHeader("mq-rabbit-msg-add", "add-msg")
+                .build();
+        log.info("mq 消息推送，消息=>{}", JSONObject.toJSONString(payLoadDTO));
+        myChannel.output().send(message);
+
+    }
+    /**
+     * 测试消息生产 通道2
+     */
+    public void testPushToMq2() {
         PayLoadDTO<String> payLoadDTO =
                 PayLoadDTO.<String>builder()
                         .action(ActionEnum.ADD)
@@ -36,9 +53,8 @@ public class MyProducer {
                 .setHeader("mq-rabbit-msg-add", "add-msg")
                 .build();
         log.info("mq 消息推送，消息=>{}", JSONObject.toJSONString(payLoadDTO));
-        myChannel.output().send(message);
+        myChannel.output2().send(message);
 
     }
-
 
 }

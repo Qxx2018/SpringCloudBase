@@ -24,6 +24,21 @@ public interface MyChannel {
     @Output(OUTPUT)
     public MessageChannel output();
 
+    /**
+     * 输出通道名称
+     */
+    String OUTPUT2 = "msg2-channel-output";
+    /**
+     * 输入通道名称
+     */
+    String INPUT2 = "msg2-channel-input";
+
+    @Input(INPUT2)
+    public SubscribableChannel input2();
+
+    @Output(OUTPUT2)
+    public MessageChannel output2();
+
 
 
 }

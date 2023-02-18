@@ -29,3 +29,4 @@
 2023.02.15
 <br/>1、Spring Cloud Stream 方式的消息驱动 【rabbit2 demo 项目】
 <br/>2、Spring Cloud Stream 消费失败后的处理策略
+<br/>3、Spring Cloud Stream应答模式+重试机制+死信

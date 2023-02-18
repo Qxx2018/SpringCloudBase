@@ -23,4 +23,9 @@ public class TestController {
         myProducer.testPushToMq();
         return Boolean.TRUE;
     }
+    @GetMapping("/push2")
+    public Boolean push2() {
+        myProducer.testPushToMq2();
+        return Boolean.TRUE;
+    }
 }

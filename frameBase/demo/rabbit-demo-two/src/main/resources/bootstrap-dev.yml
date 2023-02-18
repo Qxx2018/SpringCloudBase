@@ -16,7 +16,7 @@ sc:
     database: 5
     password: admin55670@redis
   rabbitmq:
-    addresses: 192.168.237.129
+    addresses: 127.0.0.1
     port: 5672
     username: qxx
     password: qxx
@@ -70,8 +70,33 @@ spring:
           ontentType: application/json
           default-binder: myRabbit
           consumer:
-            # 最多尝试处理几次，默认3
-            maxAttempts: 5
+            # 最多尝试处理几次，默认3,填写1关闭重试
+            maxAttempts: 3
+            # 重试时初始避退间隔，单位毫秒，默认1000
+            backOffInitialInterval: 1000
+            # 重试时最大避退间隔，单位毫秒，默认10000
+            backOffMaxInterval: 10000
+            # 避退乘数，默认2.0
+            backOffMultiplier: 2.0
+            # 当listen抛出retryableExceptions未列出的异常时，是否要重试
+            defaultRetryable: true
+            # 异常是否允许重试的map映射
+            retryableExceptions:
+              java.lang.RuntimeException: true
+              java.lang.IllegalStateException: false
+        msg2-channel-output: #输出通道的名称
+          destination: c-exchange #输出通道绑定到a-exchange交换机
+          group: ${sc.rabbitmq.group} #分组名称，生产端和消费端需要一致
+          contentType: application/json # 内容格式
+          default-binder: myRabbit # 设置要绑定的消息服务的具体设置
+        msg2-channel-input: #输入通道名称
+          destination: c-exchange
+          group: ${sc.rabbitmq.group}
+          ontentType: application/json
+          default-binder: myRabbit
+          consumer:
+            # 最多尝试处理几次，默认3,填写1关闭重试
+            maxAttempts: 1
             # 重试时初始避退间隔，单位毫秒，默认1000
             backOffInitialInterval: 1000
             # 重试时最大避退间隔，单位毫秒，默认10000
@@ -99,12 +124,11 @@ spring:
               autoBindDlq: true #绑定死信队列
               deadLetterQueueName: a-dead-queue.${sc.rabbitmq.group} #死信队列名称
               dlqDeadLetterExchange: a-dead-exchange #如果DLQ被声明，则将DLX分配给该队列 如果该列声明，那么deadLetterExchange也要声明，这个保持一致
-              republishToDlq: true #该值为false如果设置了死信队列，消息对原封不动的发送到死信队列，如果为true，则消息对带上错误信息发送至死信队列
-              requeueRejected: true #默认false，只能抛AmqpRejectAndDontRequeueException消息才能到死信队列，如果为true，所有错误消息都会抛到死信队列
-              ttl: 60000 #对列生存时间ms
-              transacted: true #启动事务
+              #ttl: 5000 #对列生存时间ms
+              #transacted: true #启动事务
           msg-channel-input:
             consumer:
+              acknowledgeMode: MANUAL # 应答模式NONE/MANUAL/AUTO
               declareExchange: true #对于通道终点是否声明交换机
               exchangeAutoDelete: false #交换机是否自动删除
               exchangeDurable: true #交换机持久化
@@ -116,7 +140,40 @@ spring:
               autoBindDlq: true #绑定死信队列
               deadLetterQueueName: a-dead-queue.${sc.rabbitmq.group} #死信队列名称
               dlqDeadLetterExchange: a-dead-exchange #如果DLQ被声明，则将DLX分配给该队列 如果该列声明，那么deadLetterExchange也要声明，这个保持一致
+              republishToDlq: true #默认false  该值为false如果设置了死信队列，消息对原封不动的发送到死信队列，如果为true，则消息对带上错误信息发送至死信队列
+              requeueRejected: true #默认false  当retry被禁用或republishToDlq为false时，传递失败是否应该重新排队。
+              #ttl: 5000 #对列生存时间ms
+              #transacted: true #启动事务
+          msg2-channel-output:
+            producer:
+              declareExchange: true #对于通道终点是否声明交换机
+              exchangeAutoDelete: false #交换机是否自动删除
+              exchangeDurable: true #交换机持久化
+              exchangeType: topic #交换机类型
+              bindQueue: true #是否声明队列并绑定到目的地交换机
+              declareDlx: true #声明死信交换机
+              deadLetterExchange: c-dead-exchange #死信交换机名称
+              deadLetterExchangeType: topic #死信交换机类型
+              autoBindDlq: true #绑定死信队列
+              deadLetterQueueName: c-dead-queue.${sc.rabbitmq.group} #死信队列名称
+              dlqDeadLetterExchange: c-dead-exchange #如果DLQ被声明，则将DLX分配给该队列 如果该列声明，那么deadLetterExchange也要声明，这个保持一致
+              #ttl: 60000 #对列生存时间ms
+              #transacted: true #启动事务
+          msg2-channel-input:
+            consumer:
+              acknowledgeMode: AUTO # 应答模式NONE/MANUAL/AUTO
+              declareExchange: true #对于通道终点是否声明交换机
+              exchangeAutoDelete: false #交换机是否自动删除
+              exchangeDurable: true #交换机持久化
+              exchangeType: topic #交换机类型
+              bindQueue: true #是否声明队列并绑定到目的地交换机
+              declareDlx: true #声明死信交换机
+              deadLetterExchange: c-dead-exchange #死信交换机名称
+              deadLetterExchangeType: topic #死信交换机类型
+              autoBindDlq: true #绑定死信队列
+              deadLetterQueueName: c-dead-queue.${sc.rabbitmq.group} #死信队列名称
+              dlqDeadLetterExchange: c-dead-exchange #如果DLQ被声明，则将DLX分配给该队列 如果该列声明，那么deadLetterExchange也要声明，这个保持一致
               republishToDlq: true #该值为false如果设置了死信队列，消息对原封不动的发送到死信队列，如果为true，则消息对带上错误信息发送至死信队列
-              requeueRejected: true #默认false，只能抛AmqpRejectAndDontRequeueException消息才能到死信队列，如果为true，所有错误消息都会抛到死信队列
-              ttl: 60000 #对列生存时间ms
-              transacted: true #启动事务
+              requeueRejected: false #当retry被禁用或republishToDlq为false时，传递失败是否应该重新排队。
+              #ttl: 10000 #对列生存时间ms
+              #transacted: true #启动事务
