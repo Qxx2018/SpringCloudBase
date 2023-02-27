@@ -1,0 +1,19 @@
+server:
+  port: 20001
+spring:
+  profiles:
+    active: dev
+  application:
+    name: sec-kill-service
+mybatis-plus:
+  mapper-locations: classpath:com/itheima/business/seckill/**/mapper/*Mapper.xml
+  #实体扫描，多个package用逗号分割
+  type-aliases-package: com.itheima.demo.business.seckill.**.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+logging:
+  level:
+    root: info
+  config: classpath:log/logback-spring_${sc.env}.xml

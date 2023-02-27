@@ -21,6 +21,7 @@
         <module>fb-gateway-web</module>
         <module>oauth</module>
         <module>demo</module>
+        <module>business</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>
