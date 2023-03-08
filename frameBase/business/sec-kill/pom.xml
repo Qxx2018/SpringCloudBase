@@ -14,6 +14,11 @@
         <spring-boot-maven-plugin.version>2.3.11.RELEASE</spring-boot-maven-plugin.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>com.itheima</groupId>
+            <artifactId>common</artifactId>
+            <version>F-V1.0</version>
+        </dependency>
         <!-- spring-boot-starter-web       -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -38,6 +43,10 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-datasource-nacos</artifactId>
         </dependency>
         <!-- test       -->
         <dependency>

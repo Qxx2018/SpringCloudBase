@@ -71,3 +71,12 @@ spring:
       transport:
         port: ${sc.sentinel.port}
         dashboard: ${sc.sentinel.dashboard} #控制台地址
+      datasource:
+        flow:
+          nacos:
+            serverAddr: ${sc.nacos.server-addr}
+            namespace: ${sc.nacos.namespace}
+            dataId: flow-rules
+            groupId: SC_GROUP_C
+            dataType: json
+            ruleType: flow
