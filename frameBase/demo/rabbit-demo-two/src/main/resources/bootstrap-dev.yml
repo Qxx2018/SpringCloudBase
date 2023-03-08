@@ -31,14 +31,14 @@ spring:
         server-addr: ${sc.nacos.server-addr}
         group: ${sc.nacos.group}
         namespace: ${sc.nacos.namespace}
-        prefix: sc-auth-config
+        prefix: rabbit-demo-two-config
         file-extension: yaml
         shared-configs:
           - dataId: application.yaml
-            group: DEFAULT_GROUP
+            group: SC_GROUP_C
             refresh: true
           - dataId: mq.yaml
-            group: DEFAULT_GROUP
+            group: SC_GROUP_C
             refresh: true
       discovery:
         server-addr: ${sc.nacos.server-addr}

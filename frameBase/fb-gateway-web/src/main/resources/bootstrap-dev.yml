@@ -2,13 +2,13 @@ sc:
   env: dev
   nacos:
     server-addr: 192.168.237.129:8848
-    namespace: 500926bd-3541-4fc0-976d-8a36102a7591
+    namespace: fde895c3-8a36-45ba-af5e-bd7bb32ddc44
     group: SC_GROUP_C
   redis:
     host: 192.168.237.129
     port: 6379
     database: 5
-    password: redisuser
+    password: admin55670@redis
   #gateway-url网关路径配置文件
   gateway:
     dynamic-route:
@@ -25,22 +25,22 @@ spring:
         file-extension: yaml
         shared-configs:
           - dataId: application.yaml
-            group: DEFAULT_GROUP
+            group: SC_GROUP_C
             refresh: true
           - dataId: redis.yaml
-            group: DEFAULT_GROUP
+            group: SC_GROUP_C
             refresh: true
           - dataId: Jwt.yaml
-            group: DEFAULT_GROUP
+            group: SC_GROUP_C
             refresh: true
           - dataId: ribbon.yaml
-            group: DEFAULT_GROUP
+            group: SC_GROUP_C
             refresh: true
           - dataId: feign.yaml
-            group: DEFAULT_GROUP
+            group: SC_GROUP_C
             refresh: true
           - dataId: whitelist.yaml
-            group: DEFAULT_GROUP
+            group: SC_GROUP_C
             refresh: true
       discovery:
         server-addr: ${sc.nacos.server-addr}

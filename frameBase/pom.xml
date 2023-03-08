@@ -16,7 +16,6 @@
     <version>F-V1.0</version>
 
     <modules>
-        <module>sys/auth</module>
         <module>common</module>
         <module>fb-gateway-web</module>
         <module>oauth</module>
