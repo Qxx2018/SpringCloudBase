@@ -28,6 +28,12 @@ sc:
     port: 8719
     dashboard: 127.0.0.1:8080
 spring:
+  datasource:
+    mysql:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://${sc.datasource.mysql.ip}/${sc.datasource.mysql.db}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
+      username: ${sc.datasource.mysql.username}
+      password: ${sc.datasource.mysql.password}
   cloud:
     nacos:
       config:
@@ -72,11 +78,11 @@ spring:
         port: ${sc.sentinel.port}
         dashboard: ${sc.sentinel.dashboard} #控制台地址
       datasource:
-        flow:
+        flowRule:
           nacos:
             serverAddr: ${sc.nacos.server-addr}
             namespace: ${sc.nacos.namespace}
-            dataId: flow-rules
-            groupId: SC_GROUP_C
+            dataId: ${spring.application.name}-flow-rules.json
+            groupId: ${sc.nacos.group}
             dataType: json
             ruleType: flow

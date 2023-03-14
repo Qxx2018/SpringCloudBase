@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @EnableDiscoveryClient
-@SpringBootApplication(scanBasePackages = {"com.itheima.business.seckill"})
+@SpringBootApplication(scanBasePackages = {"com.itheima"})
 @EnableConfigurationProperties
 public class SecKillApplication {
     public static void main(String[] args) {

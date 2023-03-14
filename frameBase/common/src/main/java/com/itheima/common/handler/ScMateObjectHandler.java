@@ -1,4 +1,4 @@
-package com.itheima.oauth.handler;
+package com.itheima.common.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.itheima.common.constants.Constant;

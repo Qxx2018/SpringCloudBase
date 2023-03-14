@@ -1,8 +1,8 @@
-package com.itheima.oauth.datasource;
+package com.itheima.common.datasource;
 
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
-import com.itheima.oauth.handler.ScMateObjectHandler;
+import com.itheima.common.handler.ScMateObjectHandler;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;

@@ -16,6 +16,7 @@
         <mybatis-plus-boot-starter.version>3.4.2</mybatis-plus-boot-starter.version>
         <hibernate-validator.version>5.4.1.Final</hibernate-validator.version>
         <mapstruct.version>1.2.0.Final</mapstruct.version>
+        <log4j.version>1.2.17</log4j.version>
     </properties>
     <dependencies>
         <!--nacos        -->
@@ -49,6 +50,11 @@
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-httpclient</artifactId>
         </dependency>
+        <!-- mysql-connector-java     -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
         <!-- redis       -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -69,6 +75,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
         <!--  lombok      -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -82,25 +93,14 @@
             <scope>compile</scope>
         </dependency>
         <!--  验证      -->
-        <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate-validator.version}</version>
-        </dependency>
-        <!-- 快捷实现domain 实体与DTO 、VO实体的映射转化 https://blog.csdn.net/qq_31964019/article/details/110225017-->
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-jdk8</artifactId>
-            <version>${mapstruct.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-            <version>${mapstruct.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>jakarta.validation</groupId>-->
+<!--            <artifactId>jakarta.validation-api</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.hibernate</groupId>-->
+<!--            <artifactId>hibernate-validator</artifactId>-->
+<!--            <version>${hibernate-validator.version}</version>-->
+<!--        </dependency>-->
     </dependencies>
 </project>
