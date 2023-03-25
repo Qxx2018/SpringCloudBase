@@ -46,6 +46,9 @@ spring:
           - dataId: feign.yaml
             group: SC_GROUP_C
             refresh: true
+          - dataId: whitelist.yaml
+            group: SC_GROUP_C
+            refresh: true
       discovery:
         server-addr: ${sc.nacos.server-addr}
         group: ${sc.nacos.group}

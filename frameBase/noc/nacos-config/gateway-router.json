@@ -1,15 +1,15 @@
 [
   {
-    "id":"sys-auth-api",
+    "id":"oauth-api",
     "order": 0,
     "predicates": [
       {
         "args": {
-          "pattern": "/ssa/**"
+          "pattern": "/oauth/**"
         },
         "name": "Path"
       }
     ],
-    "uri": "lb://auth-service"
+    "uri": "lb://oauth-service"
   }
 ]

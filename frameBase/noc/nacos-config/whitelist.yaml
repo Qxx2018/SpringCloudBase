@@ -1,4 +1,4 @@
 sc:
-  whiteList:
+  white:
     urls:
-      - "/auth/ssa/login"
+      - "/oauth/login"

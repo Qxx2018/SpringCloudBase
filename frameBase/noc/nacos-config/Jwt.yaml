@@ -1,7 +1,5 @@
 sc:
   jwt:
     config:
-      headerType: "JWT"
-      headerAlg: "HS256"
-      tokenSecret: "sc-auth-1044582360"
+      tokenSecret: "Fqm!>Pi`Bnu3TmC"
       durationDayTime: 15

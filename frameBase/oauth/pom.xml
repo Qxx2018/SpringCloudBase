@@ -11,9 +11,9 @@
     <packaging>jar</packaging>
     <artifactId>oauth</artifactId>
     <properties>
-        <spring-security-oauth2.version>2.3.4.RELEASE</spring-security-oauth2.version>
         <spring-security-oauth2-autoconfigure>2.1.11.RELEASE</spring-security-oauth2-autoconfigure>
         <spring-boot-maven-plugin.version>2.3.11.RELEASE</spring-boot-maven-plugin.version>
+        <spring-security-oauth2.version>2.3.4.RELEASE</spring-security-oauth2.version>
     </properties>
     <dependencies>
         <dependency>
@@ -37,7 +37,7 @@
             <artifactId>spring-security-oauth2-autoconfigure</artifactId>
             <version>${spring-security-oauth2-autoconfigure}</version>
         </dependency>
-        <!-- 引入security队oauth2的支持       -->
+        <!-- 引入security对oauth2的支持       -->
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>

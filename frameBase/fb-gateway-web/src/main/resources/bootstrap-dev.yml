@@ -13,7 +13,7 @@ sc:
   gateway:
     dynamic-route:
       data-id: 'gateway-router.json'
-      group: 'GATEWAY_C'
+      group: 'SC_GROUP_C'
 spring:
   cloud:
     nacos:

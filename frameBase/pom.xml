@@ -21,6 +21,7 @@
         <module>oauth</module>
         <module>demo</module>
         <module>business/sec-kill</module>
+        <module>sys/core-dto</module>
     </modules>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
