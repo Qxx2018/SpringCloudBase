@@ -9,39 +9,15 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
-    <artifactId>oauth</artifactId>
+    <artifactId>auth-resource</artifactId>
     <properties>
-        <spring-security-oauth2-autoconfigure>2.1.11.RELEASE</spring-security-oauth2-autoconfigure>
         <spring-boot-maven-plugin.version>2.3.11.RELEASE</spring-boot-maven-plugin.version>
-        <spring-security-oauth2.version>2.3.4.RELEASE</spring-security-oauth2.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>com.itheima</groupId>
             <artifactId>common</artifactId>
             <version>F-V1.0</version>
-        </dependency>
-        <!-- 导入spring-cloud oauth2支持       -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-oauth2</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.security.oauth.boot</groupId>
-                    <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security.oauth.boot</groupId>
-            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-            <version>${spring-security-oauth2-autoconfigure}</version>
-        </dependency>
-        <!-- 引入security对oauth2的支持       -->
-        <dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth2</artifactId>
-            <version>${spring-security-oauth2.version}</version>
         </dependency>
         <!-- spring-boot-starter-web       -->
         <dependency>

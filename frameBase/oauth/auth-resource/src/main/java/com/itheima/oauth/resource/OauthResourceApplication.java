@@ -1,4 +1,4 @@
-package com.itheima;
+package com.itheima.oauth.resource;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,9 +13,9 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableDiscoveryClient
 @SpringBootApplication(scanBasePackages = {"com.itheima"})
 @EnableConfigurationProperties
-public class OauthApplication {
+public class OauthResourceApplication {
     public static void main(String[] args) {
-        SpringApplication.run(OauthApplication.class,args);
-        System.out.println("=======================OauthApplication Start ==================================");
+        SpringApplication.run(OauthResourceApplication.class,args);
+        System.out.println("=======================OauthResourceApplication Start ==================================");
     }
 }

@@ -34,14 +34,14 @@ https://blog.csdn.net/m0_46379371/article/details/108486969
     <!--时间滚动输出level为DEBUG日志    -->
     <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--记录的日志文件文件名        -->
-        <file>${log.path}/oauth_debug.log</file>
+        <file>${log.path}/oauth-resource_debug.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <!--日志归档        -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/oauth_debug-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${log.path}/oauth-resource_debug-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <!--日志文件不超过100M            -->
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -62,14 +62,14 @@ https://blog.csdn.net/m0_46379371/article/details/108486969
 
     <!--时间滚动输出level为INFO日志    -->
     <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/oauth_info.log</file>
+        <file>${log.path}/oauth-resource_info.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <!--日志归档        -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/oauth_info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${log.path}/oauth-resource_info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <!--日志文件不超过100M            -->
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -90,14 +90,14 @@ https://blog.csdn.net/m0_46379371/article/details/108486969
 
     <!--时间滚动输出level为WARN日志    -->
     <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/oauth_warn.log</file>
+        <file>${log.path}/oauth-resource_warn.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <!--日志归档        -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/oauth_warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${log.path}/oauth-resource_warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <!--日志文件不超过100M            -->
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -118,14 +118,14 @@ https://blog.csdn.net/m0_46379371/article/details/108486969
 
     <!--时间滚动输出level为ERROR日志    -->
     <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.path}/oauth_error.log</file>
+        <file>${log.path}/oauth-resource_error.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <charset>UTF-8</charset>
         </encoder>
         <!--日志归档        -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.path}/oauth_error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${log.path}/oauth-resource_error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <!--日志文件不超过100M            -->
             <timeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
