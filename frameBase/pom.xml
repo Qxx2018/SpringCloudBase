@@ -18,11 +18,11 @@
     <modules>
         <module>common</module>
         <module>fb-gateway-web</module>
-        <module>oauth-service/oauth-resource</module>
         <module>demo</module>
         <module>business/sec-kill</module>
         <module>sys/core-dto</module>
         <module>oauth/auth-resource</module>
+        <module>oauth/auth-certification</module>
     </modules>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
