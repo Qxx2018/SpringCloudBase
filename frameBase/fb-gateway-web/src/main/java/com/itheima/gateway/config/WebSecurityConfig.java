@@ -38,6 +38,7 @@ public class WebSecurityConfig {
                 .pathMatchers(ArrayUtil.toArray(whiteUrlConfig.getUrls(),String.class)).permitAll()
                 //无需权限过滤的请求方式
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
+                //其他任何请求都需要鉴权管理
                 .anyExchange().access(authorizationManager)
                 //开启跨域
                 .and().cors()
