@@ -14,9 +14,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class ClientTest {
     @Test
     public void passwordEncoder() {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(
+                BCryptPasswordEncoder.BCryptVersion.$2Y,
+                16);
         String secret = passwordEncoder.encode("qrRgn8sMJXFXTAl7H0unRRYfRF1Vm10V");
-        //$2a$10$PYK7Qnjum47yRqXxJuyl1OvsL.hKgQq8h5rFl97n4gb/z83xaMLZS
         System.out.println(secret);
     }
 }

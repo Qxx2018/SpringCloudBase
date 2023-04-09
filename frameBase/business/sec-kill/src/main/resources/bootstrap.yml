@@ -8,7 +8,7 @@ spring:
 mybatis-plus:
   mapper-locations: classpath:com/itheima/business/seckill/**/mapper/*Mapper.xml
   #实体扫描，多个package用逗号分割
-  type-aliases-package: com.itheima.demo.business.seckill.**.entity
+  type-aliases-package: com.itheima.demo.business.seckill.**.models
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false

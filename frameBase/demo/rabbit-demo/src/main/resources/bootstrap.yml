@@ -8,7 +8,7 @@ spring:
 mybatis-plus:
   mapper-locations: classpath:com/itheima/demo/rabbit/**/mapper/*Mapper.xml
   #实体扫描，多个package用逗号分割
-  type-aliases-package: com.itheima.demo.rabbit.**.entity
+  type-aliases-package: com.itheima.demo.rabbit.**.modesl
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
