@@ -1,9 +1,9 @@
 package com.itheima.oauth.certification.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.itheima.oauth.certification.mapper.SysAccountMapper;
-import com.itheima.oauth.certification.models.SysAccountModel;
-import com.itheima.oauth.certification.service.SysAccountService;
+import com.itheima.oauth.certification.mapper.SysWebAccountMapper;
+import com.itheima.oauth.certification.models.SysWebAccountModel;
+import com.itheima.oauth.certification.service.SysWebAccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class SysAccountServiceImpl extends ServiceImpl<SysAccountMapper, SysAccountModel> implements SysAccountService {
+public class SysWebAccountServiceImpl extends ServiceImpl<SysWebAccountMapper, SysWebAccountModel> implements SysWebAccountService {
     /**
      * loadUserByUsername在登录的时候会触发该方法
      * 根据用户名定位用户
@@ -32,7 +32,9 @@ public class SysAccountServiceImpl extends ServiceImpl<SysAccountMapper, SysAcco
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        SysAccountModel sysAccountModel = new SysAccountModel();
-        return sysAccountModel;
+        SysWebAccountModel sysWebAccountModel = new SysWebAccountModel();
+
+        return sysWebAccountModel;
     }
+
 }

@@ -2,7 +2,7 @@ package com.itheima.oauth.certification.models;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.itheima.common.model.BaseModel;
+import com.itheima.common.model.BaseModelWithTenant;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,15 +11,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * 系统-管理平台-账户
+ * @author XinXingQian
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName(value = "sys_account")
-public class SysAccountModel extends BaseModel<SysAccountModel> implements UserDetails {
+@TableName(value = "sys_web_account")
+public class SysWebAccountModel extends BaseModelWithTenant<SysWebAccountModel> implements UserDetails {
 
+    private static final long serialVersionUID = -3093921955279413210L;
     /**
      * 登入账号
      */
