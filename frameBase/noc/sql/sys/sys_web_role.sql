@@ -1,5 +1,6 @@
 CREATE TABLE `sys_web_role` (
   `id` bigint(20) NOT NULL,
+  `tenant_id` varchar(32) DEFAULT NULL COMMENT '租户',
   `role_code` varchar(20) NOT NULL COMMENT '角色编码',
   `role_type` varchar(20) DEFAULT NULL COMMENT '角色类型',
   `role_name` varchar(50) NOT NULL COMMENT '角色名称',

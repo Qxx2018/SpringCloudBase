@@ -3,7 +3,7 @@ CREATE TABLE `sys_web_menu` (
   `tenant_id` varchar(32) DEFAULT NULL COMMENT '租户id',
   `parent_id` bigint(20) NOT NULL COMMENT '父级菜单id',
   `menu_name` varchar(50) NOT NULL COMMENT '菜单名',
-  `menu_code` varchar(50) NOT NULL,
+  `menu_code` varchar(50) NOT NULL COMMENT '菜单编码',
   `menu_level` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '菜单等级',
   `menu_sort` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '同级下菜单排序',
   `menu_icon_id` bigint(20) DEFAULT NULL COMMENT '菜单图标id',

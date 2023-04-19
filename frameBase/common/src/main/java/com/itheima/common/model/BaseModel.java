@@ -2,6 +2,7 @@ package com.itheima.common.model;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.itheima.common.constants.Constant;
@@ -42,18 +43,20 @@ public abstract class BaseModel<T extends Model<T>>  extends Model<T> implements
      */
     @TableLogic
     @TableField(value = "deleted")
-    protected String deleted = Constant.NOT_DELETE;
+    protected Integer deleted = Constant.NOT_DELETE;
 
     /**
      * 创建时间
      */
     @TableField(value = "created_time", fill = FieldFill.INSERT)
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     protected LocalDateTime createdTime;
 
     /**
      * 更新时间
      */
     @TableField(value = "updated_time", fill = FieldFill.INSERT_UPDATE, update = "NOW()")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     protected LocalDateTime updatedTime;
 
     /**
@@ -61,5 +64,6 @@ public abstract class BaseModel<T extends Model<T>>  extends Model<T> implements
      */
     @Version
     @TableField(value = "version", fill = FieldFill.INSERT_UPDATE, update = "%s+1")
+    @JsonSerialize(using = ToStringSerializer.class)
     protected Long version;
 }

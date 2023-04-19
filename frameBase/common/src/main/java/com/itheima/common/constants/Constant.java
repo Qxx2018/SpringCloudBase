@@ -5,6 +5,20 @@ package com.itheima.common.constants;
  * @author 10445
  */
 public class Constant {
-    public static final String DELETE = "1";
-    public static final String NOT_DELETE = "0";
+    /**
+     * 删除
+     */
+    public static final Integer DELETE = 1;
+    /**
+     * 不删除
+     */
+    public static final Integer NOT_DELETE = 0;
+    /**
+     * 隐藏
+     */
+    public static final Integer HIDDEN = 1;
+    /**
+     * 显示
+     */
+    public static final Integer DISPLAY = 0;
 }
