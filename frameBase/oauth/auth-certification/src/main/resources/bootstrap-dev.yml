@@ -37,6 +37,9 @@ spring:
           - dataId: redis.yaml
             group: SC_GROUP_C
             refresh: true
+          - dataId: redisson.yaml
+            group: SC_GROUP_C
+            refresh: true
           - dataId: mybatis.yaml
             group: SC_GROUP_C
             refresh: true
