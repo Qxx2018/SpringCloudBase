@@ -6,22 +6,44 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import com.itheima.common.config.redis.manager.RedisCacheManagerExtend;
+import com.itheima.common.constants.NumConstant;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.time.Duration;
+import java.util.Collections;
+import java.util.HashMap;
+
 /**
- * redisTemplate自定义序列化配置，更改其默认序列化器
+ * redis缓存配置
  * @author XinXingQian
  */
 @Configuration
+@EnableCaching
 public class RedisConfigure extends CachingConfigurerSupport {
 
+    /**
+     * 缓存前缀
+     */
+    @Value("${spring.application.name}")
+    private String cacheKeyPrefix;
 
+    /**
+     * redisTemplate自定义序列化配置，更改其默认序列化器
+     * @param redisConnectionFactory
+     * @return
+     */
     @Bean(name = "redisTemplateTemp")
     public RedisTemplate<String, Object> redisTemplateTemp(RedisConnectionFactory redisConnectionFactory) {
 
@@ -69,4 +91,34 @@ public class RedisConfigure extends CachingConfigurerSupport {
         return redisTemplate;
     }
 
+    /**
+     * 缓存管理器配置
+     * @return
+     */
+    @Bean
+    public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+
+        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig();
+
+
+        redisCacheConfiguration = redisCacheConfiguration
+                //设置缓存管理器管理的缓存的默认过期时间
+                .entryTtl(Duration.ofDays(NumConstant.NUM_1))
+                //设置 key为string序列化
+                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+                //设置value为json序列化
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
+                .computePrefixWith(cacheName -> cacheKeyPrefix + "::" + cacheName + "::")
+
+                //不缓存空值
+                .disableCachingNullValues();
+
+        return RedisCacheManagerExtend.builder(redisConnectionFactory)
+                .cacheDefaults(redisCacheConfiguration)
+                //缓存空间集合
+                .initialCacheNames(Collections.emptySet())
+                //对每个缓存空间应用不同的配置
+                .withInitialCacheConfigurations(new HashMap<>(NumConstant.NUM_3))
+                .build();
+    }
 }

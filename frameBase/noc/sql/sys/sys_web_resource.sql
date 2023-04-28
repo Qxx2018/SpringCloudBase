@@ -8,7 +8,7 @@ CREATE TABLE `sys_web_resource` (
   `resource_code` varchar(50) NOT NULL COMMENT '资源编码-全表唯一',
   `resource_level` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '资源等级',
   `resource_sort` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '同级别下排序',
-  `resource_icon_id` binary(20) DEFAULT NULL COMMENT '资源图标id',
+  `resource_icon_id` bigint(20) DEFAULT NULL COMMENT '资源图标id',
   `hidden` tinyint(4) NOT NULL DEFAULT '1' COMMENT '显示1 隐藏0',
   `created_time` datetime DEFAULT NULL COMMENT '创建时间',
   `updated_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',

@@ -23,20 +23,18 @@ import javax.annotation.Resource;
 import java.io.IOException;
 
 /**
+ * Redisson配置
  * 构建对应的SingleServerProperties 集中配置
  * https://segmentfault.com/a/1190000039743096?sort=votes
  * https://www.bookstack.cn/read/redisson-wiki-zh/spilt.6.2.-%E9%85%8D%E7%BD%AE%E6%96%B9%E6%B3%95.md
  * https://blog.csdn.net/Kevinnsm/article/details/124215652
+ * ComponentScan注解一般和@Configuration注解一起使用，主要的作用就是定义包扫描的规则，然后根据定义的规则找出哪些需类需要自动装配到spring的bean容器中，然后交由spring进行统一管理。
  * @author XinXingQian
  */
 @Configuration
-/**
- * ComponentScan注解一般和@Configuration注解一起使用，主要的作用就是定义包扫描的规则，然后根据定义的规则找出哪些需类需要自动装配到spring的bean容器中，然后交由spring进行统一管理。
- *
- * 说明：针对标注了@Controller、@Service、@Repository、@Component 的类都可以别spring扫描到。
- */
 @ComponentScan
 public class RedissonConfiguration {
+
     @Resource
     SingleServerProperties singleServerProperties;
 

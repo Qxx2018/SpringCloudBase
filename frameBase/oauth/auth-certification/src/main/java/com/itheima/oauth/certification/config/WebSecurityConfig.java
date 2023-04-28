@@ -1,6 +1,6 @@
 package com.itheima.oauth.certification.config;
 
-import com.itheima.oauth.certification.service.impl.SysWebAccountServiceImpl;
+import com.itheima.oauth.certification.business.service.LoginCertificationService;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +22,7 @@ import javax.annotation.Resource;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Resource
-    private SysWebAccountServiceImpl sysAccountService;
+    private LoginCertificationService loginCertificationService;
     /**
      * 加密
      * @return
@@ -83,6 +83,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(sysAccountService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(loginCertificationService).passwordEncoder(passwordEncoder());
     }
 }

@@ -35,5 +35,6 @@ public class SysWebRoleMenuRelModel extends BaseModelWithTenant<SysWebRoleMenuRe
      */
     @TableField(value = "menu_id")
     @JsonSerialize(using = ToStringSerializer.class)
-    private Long menu_id;
+    private Long menuId;
+
 }
