@@ -35,3 +35,5 @@
 <br/>oauth-certification认证服务初始化
 2023.04.20
 <br/>redisson
+2023.04.28
+<br/>密码登入获取token+使用UserDetailsService身份验证https://blog.csdn.net/weixin_44802953/article/details/109154822
