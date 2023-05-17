@@ -63,6 +63,7 @@ public class PermissionInformationServiceImpl implements PermissionInformationSe
         BeanUtil.copyProperties(accountModel,perAccount);
         //账户id
         Long accountId = accountModel.getId();
+        perAccount.setAccountId(accountId);
         //账户下绑定的角色id集合
         List<PermissionDTO.Role> perRoleList = new ArrayList<>();
         List<Long> roleIdList = Collections.emptyList();

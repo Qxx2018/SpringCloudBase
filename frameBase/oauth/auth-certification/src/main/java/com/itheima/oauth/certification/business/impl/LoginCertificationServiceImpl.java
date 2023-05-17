@@ -29,6 +29,7 @@ public class LoginCertificationServiceImpl implements LoginCertificationService 
 
     /**
      * loadUserByUsername在登录的时候会触发该方法
+     * https://blog.csdn.net/weixin_44802953/article/details/109154822
      * 根据用户名定位用户
      * Locates the user based on the username. In the actual implementation, the search
      * may possibly be case sensitive, or case insensitive depending on how the
@@ -50,6 +51,7 @@ public class LoginCertificationServiceImpl implements LoginCertificationService 
         BeanUtil.copyProperties(account,userDetails);
         List<PermissionDTO.Resource> resourceList = permission.getResources();
         if (CollUtil.isNotEmpty(resourceList)) {
+            log.info("当前登录用户{},持有的资源权限{}",username,resourceList.toString());
             List<GrantedAuthority> auths = resourceList.stream().map(r -> new SimpleGrantedAuthority(r.getResourceCode())).collect(Collectors.toList());
             userDetails.setGrantedAuthorities(auths);
         }

@@ -3,3 +3,6 @@ sc:
     config:
       tokenSecret: "Fqm!>Pi`Bnu3TmC"
       durationDayTime: 15
+  jws:
+    keypass: "]\"#^a@l5dFy8XGi"
+    ailas: jwt

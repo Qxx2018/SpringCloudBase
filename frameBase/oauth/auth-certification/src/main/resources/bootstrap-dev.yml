@@ -52,6 +52,9 @@ spring:
           - dataId: whitelist.yaml
             group: SC_GROUP_C
             refresh: true
+          - dataId: Jwt.yaml
+            group: SC_GROUP_C
+            refresh: true
       discovery:
         server-addr: ${sc.nacos.server-addr}
         group: ${sc.nacos.group}

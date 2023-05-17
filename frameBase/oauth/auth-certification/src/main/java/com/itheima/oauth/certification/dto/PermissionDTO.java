@@ -45,7 +45,10 @@ public class PermissionDTO implements Serializable {
     @Builder
     @ToString
     public static class Account {
-
+        /**
+         * 账户id
+         */
+        private Long accountId;
         /**
          * 登录账号
          */

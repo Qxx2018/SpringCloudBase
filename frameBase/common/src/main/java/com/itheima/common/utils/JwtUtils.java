@@ -18,6 +18,7 @@ import java.util.List;
  * @author XinXingQian
  */
 @Slf4j
+@Deprecated
 public class JwtUtils {
     /**
      * 生成虚拟的JWT token
