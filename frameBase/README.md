@@ -39,3 +39,5 @@
 <br/>密码登入获取token+使用UserDetailsService身份验证https://blog.csdn.net/weixin_44802953/article/details/109154822
 2023.05.15
 <br/>生成JWT-token（采用RSA非对称加密方式）
+2023.05.17
+<br/>自定义授权模式

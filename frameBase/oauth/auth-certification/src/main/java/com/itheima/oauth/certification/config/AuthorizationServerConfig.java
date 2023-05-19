@@ -1,15 +1,12 @@
 package com.itheima.oauth.certification.config;
 
 import com.itheima.oauth.certification.business.service.LoginCertificationService;
-import com.itheima.oauth.certification.constants.JwtConstants;
-import com.itheima.oauth.certification.dto.UserDetailsDTO;
 import com.itheima.oauth.certification.service.impl.JdbcClientDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -34,7 +31,9 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 
 import javax.annotation.Resource;
 import java.security.KeyPair;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 认证服务配置
@@ -53,6 +52,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private LoginCertificationService loginCertificationService;
     @Resource
     private JksConfig jksConfig;
+    @Resource
+    private TokenEnhancer tokenEnhancer;
     /**
      * 令牌访问端点的安全策略
      * @param security
@@ -91,7 +92,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         //Token 增强
         TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
         List<TokenEnhancer> tokenEnhancers = new ArrayList<>();
-        tokenEnhancers.add(tokenEnhancer());
+        tokenEnhancers.add(tokenEnhancer);
         tokenEnhancers.add(jwtAccessTokenConverter());
         tokenEnhancerChain.setTokenEnhancers(tokenEnhancers);
         //token存储模式设定 默认为InMemoryTokenStore模式存储到内存中
@@ -112,6 +113,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .accessTokenConverter(jwtAccessTokenConverter())
                 //JWT 添加额外信息
                 .tokenEnhancer(tokenEnhancerChain)
+                //授权模式
+                .tokenGranter(compositeTokenGranter)
 
 
         ;
@@ -183,22 +186,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         }
         return tokenGranters;
     }
-    /**
-     * JWT 内容增强
-     */
-    @Bean
-    public TokenEnhancer tokenEnhancer() {
-        return (accessToken, authentication) -> {
-            final Map<String, Object> additionalInfo = new HashMap<>();
-            UserDetailsDTO userDetails = (UserDetailsDTO) authentication.getUserAuthentication().getPrincipal();
-            additionalInfo.put(JwtConstants.JWT_ACCOUNT_ID_KEY,userDetails.getAccountId());
-            additionalInfo.put(JwtConstants.JWT_CLIENT_ID_KEY,userDetails.getClientId());
-            additionalInfo.put(JwtConstants.JWT_TENANT_ID_KEY,userDetails.getTenantId());
-            additionalInfo.put(JwtConstants.JWT_USER_LOGIN_TIME,System.currentTimeMillis());
-            ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(additionalInfo);
-            return accessToken;
-        };
-    }
+
     /**
      * 使用非对称加密算法对token签名
      */

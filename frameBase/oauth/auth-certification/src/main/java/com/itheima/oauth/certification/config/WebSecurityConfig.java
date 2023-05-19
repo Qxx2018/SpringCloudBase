@@ -1,11 +1,16 @@
 package com.itheima.oauth.certification.config;
 
+import cn.hutool.core.convert.Convert;
+import lombok.Setter;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+import java.util.List;
 
 /**
  * 身份鉴权安全保护
@@ -13,8 +18,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * @author XinXingQian
  */
 @EnableWebSecurity
+@ConfigurationProperties("sc.white")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
+    /**
+     * 白名单
+     */
+    @Setter
+    private List<String> urls;
     /**
      * 注入一个认证管理器，自身不实现身份认证，这一步必不可少，否则SpringBoot会自动配置一个AuthenticationManager,覆盖掉内存中的用户
      * @return
@@ -37,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll()
                 //不需要授权的请求
-                .antMatchers( "/oauth*" ).permitAll()
+                .antMatchers( Convert.toStrArray(urls) ).permitAll()
                 //除上面匹配任何请求都需要授权
                 .anyRequest().authenticated()
                 .and()

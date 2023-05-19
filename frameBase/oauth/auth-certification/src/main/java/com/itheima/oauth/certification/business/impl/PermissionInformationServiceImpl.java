@@ -61,6 +61,8 @@ public class PermissionInformationServiceImpl implements PermissionInformationSe
         }
         PermissionDTO.Account perAccount = PermissionDTO.Account.builder().build();
         BeanUtil.copyProperties(accountModel,perAccount);
+        //租户id
+        perAccount.setTenantId(accountModel.getTenantId());
         //账户id
         Long accountId = accountModel.getId();
         perAccount.setAccountId(accountId);

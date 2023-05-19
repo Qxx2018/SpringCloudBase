@@ -19,21 +19,17 @@ import java.util.List;
 public class UserDetailsDTO implements UserDetails {
     private static final long serialVersionUID = -3266181506922752108L;
     /**
-     * 账号id
-     */
-    private Long accountId;
-    /**
      * 租户id
      */
     private String tenantId;
     /**
-     * 客户端id
+     * 账号id
      */
-    private String clientId;
+    private Long accountId;
     /**
      * 登入账号
      */
-    private String username;
+    private String account;
 
     /**
      * 登录账号密码
@@ -71,7 +67,7 @@ public class UserDetailsDTO implements UserDetails {
      */
     @Override
     public String getUsername() {
-        return username;
+        return account;
     }
 
     /**

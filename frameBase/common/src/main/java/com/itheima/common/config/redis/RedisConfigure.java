@@ -40,13 +40,13 @@ public class RedisConfigure extends CachingConfigurerSupport {
     private String cacheKeyPrefix;
 
     /**
-     * redisTemplate自定义序列化配置，更改其默认序列化器
+     * 自定义序列化配置，更改其默认序列化器
      * @param redisConnectionFactory
      * @return
      */
-    @Bean(name = "redisTemplateTemp")
-    public RedisTemplate<String, Object> redisTemplateTemp(RedisConnectionFactory redisConnectionFactory) {
-
+    @SuppressWarnings("rawtypes")
+    @Bean
+    public RedisTemplate redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         //配置对象映射器
         ObjectMapper objectMapper = new ObjectMapper();
         //指定要序列化的域，file、get、set，以及修饰符范围。
@@ -63,28 +63,18 @@ public class RedisConfigure extends CachingConfigurerSupport {
         );
         //jackson序列化默认存在不认识字段报错，用户可以自己设置将其忽略
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        //================================= RedisTemplate 序列化设置 start ==============================
-
-
         //使用StringRedisSerializer来序列化和反序列化Redis的key值
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
         // 使用GenericJackson2JsonRedisSerializer来序列化和反序列化Redis的value值
         GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer(objectMapper);
+        //================================= RedisTemplate 序列化设置 start ==============================
 
-        //使用 <String, Object> 泛型，避免类型转换
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        //配置连接工厂
+        RedisTemplate redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
-
-        //key、hashKey采用String的序列化方式
         redisTemplate.setKeySerializer(stringRedisSerializer);
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
-
-        //value、HashValue采用Jackson的序列化方式
         redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
         redisTemplate.setHashValueSerializer(genericJackson2JsonRedisSerializer);
-
         //初始化函数，使用以上设置的序列化参数
         redisTemplate.afterPropertiesSet();
         //================================= RedisTemplate 序列化设置 end ================================
@@ -99,7 +89,6 @@ public class RedisConfigure extends CachingConfigurerSupport {
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
 
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig();
-
 
         redisCacheConfiguration = redisCacheConfiguration
                 //设置缓存管理器管理的缓存的默认过期时间

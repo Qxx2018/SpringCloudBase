@@ -2,15 +2,13 @@ package com.itheima.oauth.certification.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  * Jwt 配置
  * @author 10445
  */
-@Data
-@Component
 @ConfigurationProperties("sc.jwt.config")
+@Data
 public class JwtConfig {
     /**
      * 头类型：example: JWT

@@ -1,4 +1,4 @@
 sc:
   white:
     urls:
-      - "/oauth/login"
+      - "/oauth/rsa/publicKey"
