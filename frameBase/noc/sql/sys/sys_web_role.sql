@@ -6,6 +6,8 @@ CREATE TABLE `sys_web_role` (
   `role_name` varchar(50) NOT NULL COMMENT '角色名称',
   `created_time` datetime DEFAULT NULL,
   `updated_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `created_by` varchar(32) DEFAULT NULL,
+  `updated_by` varchar(32) DEFAULT NULL,
   `version` bigint(20) NOT NULL DEFAULT '0' COMMENT '版本',
   `deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除 1删除 0正常',
   PRIMARY KEY (`id`)

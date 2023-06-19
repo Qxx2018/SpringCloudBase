@@ -2,3 +2,5 @@ sc:
   white:
     urls:
       - "/oauth/rsa/publicKey"
+      - "/oauth/getImgCode"
+      - "/oauth/sendSmsCode"

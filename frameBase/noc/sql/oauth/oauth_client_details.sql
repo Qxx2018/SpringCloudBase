@@ -4,7 +4,7 @@ CREATE TABLE `oauth_client_details` (
   `resource_ids` varchar(255) NOT NULL COMMENT '客户端所能访问的资源id集合，多个资源时用逗号分割',
   `client_secret` varchar(255) NOT NULL COMMENT '客户端的访问密钥 同appSecret',
   `scope` varchar(255) NOT NULL COMMENT '指定客户端申请的权限范围，自定义',
-  `authorized_grant_types` varchar(255) NOT NULL COMMENT '授权模式：\r\nauthorization_code 授权码\r\npassword 密码\r\nrefresh_token 刷新token\r\nimplicit 隐藏式\r\nclient_credentials 客户端模式',
+  `authorized_grant_types` varchar(255) NOT NULL COMMENT '授权模式：\r\nauthorization_code 授权码\r\npassword 密码\r\nrefresh_token 刷新token\r\nimplicit 隐藏式\r\nclient_credentials 客户端模式\r\nsms_code 手机短信验证码模式',
   `web_server_redirect_uri` varchar(255) NOT NULL COMMENT '客户端的重定向URI',
   `authorities` varchar(255) NOT NULL COMMENT '客户端拥有的权限值，自定义',
   `access_token_validity` int(11) NOT NULL COMMENT '客户端access_token有效时间',

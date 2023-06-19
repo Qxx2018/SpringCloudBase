@@ -1,5 +1,6 @@
 package com.itheima.oauth.certification.dto;
 
+import com.itheima.common.enums.GenderEnum;
 import lombok.*;
 
 import java.io.Serializable;
@@ -21,6 +22,11 @@ public class PermissionDTO implements Serializable {
      * 账户信息
      */
     private Account account;
+
+    /**
+     * 用户信息
+     */
+    private User user;
 
     /**
      * 角色
@@ -63,6 +69,43 @@ public class PermissionDTO implements Serializable {
         private String password;
 
     }
+
+    /**
+     * 用户信息
+     */
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    @ToString
+    public static class User {
+        /**
+         * 手机号
+         */
+        private String phone;
+
+        /**
+         * 真实姓名
+         */
+        private String realName;
+
+        /**
+         * 昵称
+         */
+        private String nickName;
+
+        /**
+         * 性别 M男F女 {@link GenderEnum}
+         */
+        private String gender;
+
+        /**
+         * 头像
+         */
+        private Long facePic;
+    }
+
+
     /**
      * 角色
      */

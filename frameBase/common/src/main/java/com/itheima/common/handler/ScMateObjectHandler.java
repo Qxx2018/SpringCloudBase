@@ -25,6 +25,9 @@ public class ScMateObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         LocalDateTime now = LocalDateTime.now();
+        //当前执行业务操作的账号id
+        //TODO 从上下行文中获取
+        Long accountId = 0L;
         //创建时间
         Object createdDate = this.getFieldValByName("createdTime", metaObject);
         if (Objects.isNull(createdDate)) {
@@ -40,9 +43,18 @@ public class ScMateObjectHandler implements MetaObjectHandler {
         if (Objects.isNull(deleted)) {
             this.setFieldValByName("deleted", Constant.NOT_DELETE, metaObject);
         }
-        /**
-         * 初始化乐观锁
-         */
+        //创建人
+        Object createdBy = this.getFieldValByName("createdBy",metaObject);
+        if (Objects.isNull(createdBy)) {
+            this.setFieldValByName("createdBy",accountId.toString(),metaObject);
+        }
+        //更新人
+        Object updatedBy = this.getFieldValByName("updatedBy",metaObject);
+        if (Objects.isNull(updatedBy)) {
+            this.setFieldValByName("updatedBy",accountId.toString(),metaObject);
+        }
+
+        //初始化乐观锁
         Object version = this.getFieldValByName("version", metaObject);
         if (Objects.isNull(version)) {
             this.setFieldValByName("version", 0L, metaObject);

@@ -8,11 +8,29 @@ import com.itheima.oauth.certification.dto.PermissionDTO;
  * @author XinXingQian
  */
 public interface PermissionInformationService {
+
+    /**
+     * 获取认证用户的权限信息
+     * @param accountId 账号id
+     * @return {@link PermissionDTO}
+     */
+    PermissionDTO getPermissionByAccountId(Long accountId);
+
+
     /**
      * 获取认证用户的权限信息
      * @param account 账号
      * @return {@link PermissionDTO}
      */
     PermissionDTO getPermissionByAccount(String account);
+
+
+
+    /**
+     * 获取认证用户的权限信息
+     * @param phone 用户手机号
+     * @return {@link PermissionDTO}
+     */
+    PermissionDTO getPermissionByPhone(String phone);
 
 }

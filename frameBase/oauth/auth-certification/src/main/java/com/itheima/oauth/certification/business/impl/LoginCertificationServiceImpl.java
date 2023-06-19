@@ -28,7 +28,27 @@ public class LoginCertificationServiceImpl implements LoginCertificationService 
     private PermissionInformationService permissionInformationService;
 
     /**
-     * loadUserByUsername在登录的时候会触发该方法
+     * Locates the user to get GrantedAuthority
+     * 定位用户获取资源权限
+     * @param permission
+     * @return
+     */
+    private UserDetails locatesUser(PermissionDTO permission) {
+        UserDetailsDTO userDetails = UserDetailsDTO.builder().build();
+        PermissionDTO.Account account = permission.getAccount();
+        BeanUtil.copyProperties(account,userDetails);
+        List<PermissionDTO.Resource> resourceList = permission.getResources();
+        if (CollUtil.isNotEmpty(resourceList)) {
+            log.info("当前登录账户{},持有的资源权限{}",account.getAccountId(),resourceList.toString());
+            List<GrantedAuthority> auths = resourceList.stream().map(r -> new SimpleGrantedAuthority(r.getResourceCode())).collect(Collectors.toList());
+            userDetails.setGrantedAuthorities(auths);
+        }
+        return userDetails;
+    }
+
+    /**
+     * loadUserByUsername根据用户名定位用户
+     * 在登录的时候会触发该方法
      * https://blog.csdn.net/weixin_44802953/article/details/109154822
      * 根据用户名定位用户
      * Locates the user based on the username. In the actual implementation, the search
@@ -46,15 +66,19 @@ public class LoginCertificationServiceImpl implements LoginCertificationService 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         PermissionDTO permission = permissionInformationService.getPermissionByAccount(username);
-        UserDetailsDTO userDetails = UserDetailsDTO.builder().build();
-        PermissionDTO.Account account = permission.getAccount();
-        BeanUtil.copyProperties(account,userDetails);
-        List<PermissionDTO.Resource> resourceList = permission.getResources();
-        if (CollUtil.isNotEmpty(resourceList)) {
-            log.info("当前登录用户{},持有的资源权限{}",username,resourceList.toString());
-            List<GrantedAuthority> auths = resourceList.stream().map(r -> new SimpleGrantedAuthority(r.getResourceCode())).collect(Collectors.toList());
-            userDetails.setGrantedAuthorities(auths);
-        }
-        return userDetails;
+        return this.locatesUser(permission);
+    }
+
+    /**
+     * Locates the user based on the phone
+     * 根据手机号定位用户
+     * @param phone
+     * @return
+     * @throws UsernameNotFoundException
+     */
+    @Override
+    public UserDetails loadUserByPhone(String phone) throws UsernameNotFoundException {
+        PermissionDTO permission = permissionInformationService.getPermissionByPhone(phone);
+        return this.locatesUser(permission);
     }
 }

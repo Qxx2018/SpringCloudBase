@@ -60,6 +60,18 @@ public abstract class BaseModel<T extends Model<T>>  extends Model<T> implements
     protected LocalDateTime updatedTime;
 
     /**
+     * 创建者
+     */
+    @TableField(value = "created_by", fill = FieldFill.INSERT)
+    protected String createdBy;
+
+    /**
+     * 更新者
+     */
+    @TableField(value = "updated_by", fill = FieldFill.INSERT_UPDATE)
+    protected String updatedBy;
+
+    /**
      * 版本
      */
     @Version

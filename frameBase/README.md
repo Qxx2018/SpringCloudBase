@@ -39,5 +39,9 @@
 <br/>密码登入获取token+使用UserDetailsService身份验证https://blog.csdn.net/weixin_44802953/article/details/109154822
 2023.05.15
 <br/>生成JWT-token（采用RSA非对称加密方式）
-2023.05.17
+2023.05.17~05.31
 <br/>自定义授权模式
+<br/>多用户体系下，根据客户端id区分不同的用户体系来获取认证用户信息
+<br/>AuthenticationProvider自定义身份验证逻辑
+<br/>图形验证码服务+手机短信验证码服务
+<br/>后台登入：账号密码（注册，后续支持绑定手机号）、 手机短信验证码（注册，后续支持完善账号信息）

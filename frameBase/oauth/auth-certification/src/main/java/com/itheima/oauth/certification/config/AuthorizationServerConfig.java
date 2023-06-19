@@ -1,6 +1,6 @@
 package com.itheima.oauth.certification.config;
 
-import com.itheima.oauth.certification.business.service.LoginCertificationService;
+import com.itheima.oauth.certification.extension.authchannels.sms.SmsCodeTokenGranter;
 import com.itheima.oauth.certification.service.impl.JdbcClientDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,8 +48,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private AuthenticationManager authenticationManager;
     @Resource
     private PasswordEncoder passwordEncoder;
-    @Resource
-    private LoginCertificationService loginCertificationService;
     @Resource
     private JksConfig jksConfig;
     @Resource
@@ -107,16 +105,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 )
         );
         endpoints
-                .userDetailsService(loginCertificationService)
                 .authenticationManager(authenticationManager)
-                //jwt增强，自定义的加密算法对token签名
-                .accessTokenConverter(jwtAccessTokenConverter())
-                //JWT 添加额外信息
-                .tokenEnhancer(tokenEnhancerChain)
                 //授权模式
                 .tokenGranter(compositeTokenGranter)
-
-
+                //JWT 添加额外信息
+                .tokenEnhancer(tokenEnhancerChain)
+                //jwt增强，自定义的加密算法对token签名
+                .accessTokenConverter(jwtAccessTokenConverter())
         ;
 
     }
@@ -144,6 +139,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                         requestFactory)
         );
         //TODO 其他自定义的授权模式
+        //添加手机短信验证码授权模式的授权者
+        tokenGranters.add(
+                new SmsCodeTokenGranter(authenticationManager, tokenServices, clientDetailsService, requestFactory));
         return tokenGranters;
     }
     /**

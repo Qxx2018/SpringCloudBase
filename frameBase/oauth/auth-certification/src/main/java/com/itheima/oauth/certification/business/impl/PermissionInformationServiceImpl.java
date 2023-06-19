@@ -40,22 +40,19 @@ public class PermissionInformationServiceImpl implements PermissionInformationSe
     private SysWebRoleResRelService sysWebRoleResRelService;
     @Resource
     private SysWebResourceService sysWebResourceService;
+    @Resource
+    private SysWebUserService sysWebUserService;
 
     /**
      * 获取认证用户的权限信息
      *
-     * @param account 账号
+     * @param accountId 账号id
+     * @return {@link PermissionDTO}
      */
     @Override
-    public PermissionDTO getPermissionByAccount(String account) {
-
+    public PermissionDTO getPermissionByAccountId(Long accountId) {
         //账户信息
-        SysWebAccountModel accountModel = sysWebAccountService.getOne(
-                new LambdaQueryWrapper<SysWebAccountModel>()
-                        .select(SysWebAccountModel::getId,SysWebAccountModel::getAccount,SysWebAccountModel::getPassword)
-                        .eq(SysWebAccountModel::getDeleted, Constant.NOT_DELETE)
-                        .eq(SysWebAccountModel::getAccount,account)
-        );
+        SysWebAccountModel accountModel = sysWebAccountService.getById(accountId);
         if (Objects.isNull(accountModel)) {
             throw new UsernameNotFoundException("用户不存在");
         }
@@ -64,7 +61,6 @@ public class PermissionInformationServiceImpl implements PermissionInformationSe
         //租户id
         perAccount.setTenantId(accountModel.getTenantId());
         //账户id
-        Long accountId = accountModel.getId();
         perAccount.setAccountId(accountId);
         //账户下绑定的角色id集合
         List<PermissionDTO.Role> perRoleList = new ArrayList<>();
@@ -99,9 +95,9 @@ public class PermissionInformationServiceImpl implements PermissionInformationSe
             }
             List<SysWebRoleMenuRelModel> roleMenuRelModelList = sysWebRoleMenuRelService.list(
                     new LambdaQueryWrapper<SysWebRoleMenuRelModel>()
-                        .select(SysWebRoleMenuRelModel::getMenuId)
-                        .eq(SysWebRoleMenuRelModel::getDeleted,Constant.NOT_DELETE)
-                        .in(SysWebRoleMenuRelModel::getRoleId,roleIdList)
+                            .select(SysWebRoleMenuRelModel::getMenuId)
+                            .eq(SysWebRoleMenuRelModel::getDeleted,Constant.NOT_DELETE)
+                            .in(SysWebRoleMenuRelModel::getRoleId,roleIdList)
             );
             if (CollUtil.isNotEmpty(roleMenuRelModelList)) {
                 menuIdList = roleMenuRelModelList.stream().map(SysWebRoleMenuRelModel::getMenuId).collect(Collectors.toList());
@@ -130,5 +126,46 @@ public class PermissionInformationServiceImpl implements PermissionInformationSe
                 .role(perRoleList)
                 .menus(perMenuList)
                 .build();
+    }
+
+    /**
+     * 获取认证用户的权限信息
+     *
+     * @param account 账号
+     */
+    @Override
+    public PermissionDTO getPermissionByAccount(String account) {
+
+        //账户信息
+        SysWebAccountModel accountModel = sysWebAccountService.getOne(
+                new LambdaQueryWrapper<SysWebAccountModel>()
+                        .select(SysWebAccountModel::getId,SysWebAccountModel::getAccount,SysWebAccountModel::getPassword)
+                        .eq(SysWebAccountModel::getDeleted, Constant.NOT_DELETE)
+                        .eq(SysWebAccountModel::getAccount,account)
+        );
+        if (Objects.isNull(accountModel)) {
+            throw new UsernameNotFoundException("用户不存在");
+        }
+        return this.getPermissionByAccountId(accountModel.getId());
+    }
+
+    /**
+     * 获取认证用户的权限信息
+     *
+     * @param phone 用户手机号
+     * @return {@link PermissionDTO}
+     */
+    @Override
+    public PermissionDTO getPermissionByPhone(String phone) {
+        SysWebUserModel userModel = sysWebUserService.getOne(
+                new LambdaQueryWrapper<SysWebUserModel>()
+                .select(SysWebUserModel::getAccountId,SysWebUserModel::getPhone,SysWebUserModel::getId)
+                .eq(SysWebUserModel::getDeleted, Constant.NOT_DELETE)
+                .eq(SysWebUserModel::getPhone,phone)
+        );
+        if (Objects.isNull(userModel)) {
+            throw new UsernameNotFoundException("用户不存在");
+        }
+        return this.getPermissionByAccountId(userModel.getAccountId());
     }
 }

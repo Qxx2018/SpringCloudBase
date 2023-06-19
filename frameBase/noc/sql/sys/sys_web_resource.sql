@@ -12,6 +12,8 @@ CREATE TABLE `sys_web_resource` (
   `hidden` tinyint(4) NOT NULL DEFAULT '1' COMMENT '显示1 隐藏0',
   `created_time` datetime DEFAULT NULL COMMENT '创建时间',
   `updated_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `created_by` varchar(32) DEFAULT NULL,
+  `updated_by` varchar(32) DEFAULT NULL,
   `version` bigint(20) NOT NULL DEFAULT '0' COMMENT '版本',
   `deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除 1删除 0正常',
   PRIMARY KEY (`id`,`resource_code`) USING BTREE

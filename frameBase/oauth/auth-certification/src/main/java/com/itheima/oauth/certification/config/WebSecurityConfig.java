@@ -1,15 +1,21 @@
 package com.itheima.oauth.certification.config;
 
 import cn.hutool.core.convert.Convert;
+import com.itheima.oauth.certification.business.impl.LoginCertificationServiceImpl;
+import com.itheima.oauth.certification.extension.authchannels.sms.SmsCodeAuthenticationProvider;
 import lombok.Setter;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -20,6 +26,11 @@ import java.util.List;
 @EnableWebSecurity
 @ConfigurationProperties("sc.white")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Resource
+    private LoginCertificationServiceImpl loginCertificationService;
+    @Resource
+    private PasswordEncoder passwordEncoder;
     /**
      * 白名单
      */
@@ -34,6 +45,44 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    /**
+     * 添加多种身份验证逻辑[微信认证 用户密码验证码认证 手机验证码认证]
+     * @param auth the {@link AuthenticationManagerBuilder} to use
+     * @throws Exception
+     */
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(loginCertificationService).passwordEncoder(passwordEncoder);
+        auth.authenticationProvider(daoAuthenticationProvider());
+        auth.authenticationProvider(smsCodeAuthenticationProvider());
+    }
+
+    /**
+     * 用户名密码认证授权提供者
+     * @return
+     */
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(loginCertificationService);
+        provider.setPasswordEncoder(passwordEncoder);
+        provider.setHideUserNotFoundExceptions(false);
+        return provider;
+    }
+
+
+    /**
+     * 手机验证码认证授权提供者
+     *
+     * @return
+     */
+    @Bean
+    public SmsCodeAuthenticationProvider smsCodeAuthenticationProvider() {
+        SmsCodeAuthenticationProvider provider = new SmsCodeAuthenticationProvider();
+        provider.setUserDetailsService(loginCertificationService);
+        return provider;
     }
 
     /**
