@@ -2,6 +2,7 @@ package com.itheima.oauth.certification.config;
 
 import cn.hutool.core.convert.Convert;
 import com.itheima.oauth.certification.business.impl.LoginCertificationServiceImpl;
+import com.itheima.oauth.certification.business.impl.ValidateCodeServiceImpl;
 import com.itheima.oauth.certification.extension.authchannels.sms.SmsCodeAuthenticationProvider;
 import lombok.Setter;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
@@ -31,6 +32,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private LoginCertificationServiceImpl loginCertificationService;
     @Resource
     private PasswordEncoder passwordEncoder;
+    @Resource
+    private ValidateCodeServiceImpl validateCodeService;
     /**
      * 白名单
      */
@@ -54,7 +57,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(loginCertificationService).passwordEncoder(passwordEncoder);
         auth.authenticationProvider(daoAuthenticationProvider());
         auth.authenticationProvider(smsCodeAuthenticationProvider());
     }
@@ -82,6 +84,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public SmsCodeAuthenticationProvider smsCodeAuthenticationProvider() {
         SmsCodeAuthenticationProvider provider = new SmsCodeAuthenticationProvider();
         provider.setUserDetailsService(loginCertificationService);
+        provider.setValidateCodeService(validateCodeService);
         return provider;
     }
 

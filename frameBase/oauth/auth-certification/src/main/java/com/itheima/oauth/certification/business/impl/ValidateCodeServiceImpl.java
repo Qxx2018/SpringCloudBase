@@ -78,15 +78,15 @@ public class ValidateCodeServiceImpl implements ValidateCodeService {
     @Override
     public Boolean validate(String code, String phone) {
         //缓存获取当下发送给用户的验证码
-//        if (!redisUtil.hHasKey(AuthConstants.SMS_KEY,phone)) {
-//            return Boolean.FALSE;
-//        }
-//        String cacheCode = (String) redisUtil.hget(AuthConstants.SMS_KEY,phone);
-        if (!"058925".equals(code)) {
+        if (!redisUtil.hHasKey(AuthConstants.SMS_KEY,phone)) {
+            return Boolean.FALSE;
+        }
+        String cacheCode = (String) redisUtil.hget(AuthConstants.SMS_KEY,phone);
+        if (!code.equals(cacheCode)) {
             return Boolean.FALSE;
         }
         //对比成功，删除验证码
-//        this.remove(phone);
+        this.remove(phone);
         return Boolean.TRUE;
     }
 }

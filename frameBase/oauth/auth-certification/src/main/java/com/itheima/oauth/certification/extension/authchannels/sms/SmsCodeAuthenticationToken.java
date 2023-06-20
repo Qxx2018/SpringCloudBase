@@ -46,14 +46,6 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
         super.setAuthenticated(true);
     }
 
-    public static SmsCodeAuthenticationToken unauthenticated(Object principal, Object credentials) {
-        return new SmsCodeAuthenticationToken(principal,credentials);
-    }
-
-    public static SmsCodeAuthenticationToken authenticated(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
-        return new SmsCodeAuthenticationToken(principal,credentials,authorities);
-    }
-
     // ~ Methods
     // ========================================================================================================
 

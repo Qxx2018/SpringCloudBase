@@ -1,5 +1,6 @@
 package com.itheima.oauth.certification.extension.authchannels.sms;
 
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AccountStatusException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,7 +18,6 @@ import java.util.Objects;
  * 手机验证码授权模式----自定义授权模式
  * @author XinXingQian
  */
-@SuppressWarnings("all")
 public class SmsCodeTokenGranter extends AbstractTokenGranter {
     /**
      * 声明授权者 SmsCodeTokenGranter 支持授权模式 sms_code
@@ -63,9 +63,9 @@ public class SmsCodeTokenGranter extends AbstractTokenGranter {
         //防止下游密码泄露
         parameters.remove("code");
         //创建SmsCodeAuthenticationToken实例----认证未通过的初始化方法
-        Authentication userAuth = SmsCodeAuthenticationToken.unauthenticated(mobile,code);
+        Authentication userAuth = new SmsCodeAuthenticationToken(mobile,code);
         //把用户传入的参数交给自定义的Token
-        ((SmsCodeAuthenticationToken) userAuth).setDetails(parameters);
+        ((AbstractAuthenticationToken) userAuth).setDetails(parameters);
         try {
             userAuth = authenticationManager.authenticate(userAuth);
         }
@@ -75,7 +75,6 @@ public class SmsCodeTokenGranter extends AbstractTokenGranter {
         if (Objects.isNull(userAuth) || !userAuth.isAuthenticated()) {
             throw new InvalidGrantException("Could not authenticate user: " + mobile);
         }
-        //我们不需要使用AuthenticationManager认证userAuth，直接根据userAuth创建OAuth2Request
         OAuth2Request storedOAuth2Request = this.getRequestFactory().createOAuth2Request(client, tokenRequest);
         return new OAuth2Authentication(storedOAuth2Request, userAuth);
 

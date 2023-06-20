@@ -2,7 +2,7 @@ package com.itheima.oauth.certification.extension.authchannels.sms;
 
 import com.itheima.common.exception.BusinessException;
 import com.itheima.oauth.certification.business.impl.LoginCertificationServiceImpl;
-import com.itheima.oauth.certification.business.impl.ValidateCodeServiceImpl;
+import com.itheima.oauth.certification.business.service.ValidateCodeService;
 import lombok.Data;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -20,7 +20,7 @@ import java.util.HashSet;
 @Data
 public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 
-    private ValidateCodeServiceImpl validateCodeService;
+    private ValidateCodeService validateCodeService;
     private UserDetailsService userDetailsService;
 
     /**
