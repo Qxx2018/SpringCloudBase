@@ -21,6 +21,10 @@ public class RsaController {
     @Resource
     private KeyPair keyPair;
 
+    /**
+     * 获取公钥
+     * @return
+     */
     @GetMapping("/publicKey")
     public Map<String, Object> getPublicKey() {
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
