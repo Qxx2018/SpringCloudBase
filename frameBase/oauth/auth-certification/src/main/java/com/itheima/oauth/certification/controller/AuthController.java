@@ -4,22 +4,27 @@ package com.itheima.oauth.certification.controller;
 import com.itheima.common.vo.Rsp;
 import com.itheima.oauth.certification.business.service.ImageValidateCodeService;
 import com.itheima.oauth.certification.business.service.ValidateCodeService;
+import com.itheima.oauth.certification.dto.accredit.PasswordModelLoginDTO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import java.io.IOException;
+import java.security.Principal;
 
 /**
  * 认证中心
  * @author XinXingQian
  */
+@Api(tags = "认证中心")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/oauth")
@@ -54,4 +59,21 @@ public class AuthController {
     public Rsp<String> sendSmsCode(@RequestParam(value = "phone") @NotBlank(message = "手机号不填") String phone) {
         return validateCodeService.sendSmsCode(phone);
     }
+
+    /**本系统Oauth**/
+    @PostMapping("/password/login")
+    @ApiOperation(value = "OAuth2认证-账号密码登入")
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "header", name = "Authorization",value = "Example: Basic Y2xpZW50OnNlY3JldA==", required = true)
+    })
+    public Rsp<String> passwordModelLogin(
+            @ApiIgnore Principal principal,
+            @RequestBody PasswordModelLoginDTO passwordModelLoginDTO
+            )
+    {
+
+        return Rsp.ok();
+    }
+
+    /**作为第三方系统的OAuth**/
 }

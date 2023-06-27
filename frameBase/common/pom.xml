@@ -20,7 +20,7 @@
         <java-jwt.version>3.4.0</java-jwt.version>
         <hutool.version>5.8.15</hutool.version>
         <redisson-spring-boot-starter.version>3.14.0</redisson-spring-boot-starter.version>
-        <springfox-swagger.version>3.0.0</springfox-swagger.version>
+        <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
     </properties>
     <dependencies>
         <dependency>
@@ -126,18 +126,8 @@
         <!-- springfox-swagger2        -->
         <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox-swagger.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox-swagger.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
             <artifactId>springfox-boot-starter</artifactId>
-            <version>${springfox-swagger.version}</version>
+            <version>${springfox-boot-starter.version}</version>
         </dependency>
     </dependencies>
 </project>

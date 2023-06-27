@@ -1,7 +1,9 @@
-package com.itheima.common.config;
+package com.itheima.oauth.certification.config;
 
+import io.swagger.annotations.Api;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.oas.annotations.EnableOpenApi;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 @Configuration
 @EnableSwagger2
 @EnableOpenApi
+@Profile({"dev","test"})
 public class SwaggerConfig {
     /**
      * 配置 Swagger 的 Docket 的 Bean 实例
@@ -32,7 +35,7 @@ public class SwaggerConfig {
                 //启动
                 .enable(true)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.itheima.oauth.certification.controller"))
+                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 .paths(PathSelectors.any())
                 .build();
     }
@@ -44,8 +47,8 @@ public class SwaggerConfig {
         //作者信息
         Contact contact = new Contact("QianXinXing","","");
 
-        return new ApiInfo("Swagger API 文档",
-                "这个是一个 Swagger 接口文档。",
+        return new ApiInfo("Oauth2 AuthorizationServer API",
+                "Oauth2 认证服务 接口文档。",
                 "v1.0",
                 "",
                 contact,
@@ -53,6 +56,5 @@ public class SwaggerConfig {
                 "",
                 new ArrayList());
     }
-
 }
 
