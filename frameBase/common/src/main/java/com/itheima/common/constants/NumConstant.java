@@ -5,6 +5,10 @@ package com.itheima.common.constants;
  * @author XinXingQian
  */
 public class NumConstant {
+    /**
+     * 数值-1
+     */
+    public static int Num_Neg_1 = -1;
 
     /**
      * 数值0

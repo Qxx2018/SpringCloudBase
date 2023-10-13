@@ -17,7 +17,11 @@ public enum SpecialCharEnum {
     /**
      * # 井号
      */
-    POUND_SIGN("#","井号")
+    POUND_SIGN("#","井号"),
+    /**
+     * : 冒号
+     */
+    COLON(":","冒号"),
     ;
     /**
      * 符号

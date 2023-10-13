@@ -6,6 +6,10 @@ package com.itheima.common.constants;
  */
 public class Constant {
     /**
+     * ""
+     */
+    public static final String EMPTY_STR = "";
+    /**
      * 删除
      */
     public static final Integer DELETE = 1;
