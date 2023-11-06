@@ -81,7 +81,7 @@ public class AuthController {
     }
 
     /**本系统Oauth**/
-    @PostMapping("/password/login")
+    @PostMapping("/token")
     @ApiOperation(value = "OAuth2认证-账号密码登入")
     public Rsp<Oauth2TokenVO> passwordModelLogin(
             @ApiIgnore Principal principal,
