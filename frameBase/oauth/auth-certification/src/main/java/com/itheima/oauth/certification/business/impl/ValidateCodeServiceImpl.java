@@ -33,7 +33,7 @@ public class ValidateCodeServiceImpl implements ValidateCodeService {
     @Override
     public Rsp<String> sendSmsCode(String phone) {
         //先去redis查寻该手机号在60秒内是否发送过
-        if(redisUtil.hHasKey(AuthConstants.SMS_KEY,phone)) {
+        if(redisUtil.hHasKey(AuthConstants.SMS_LOGIN_CHECK_KEY,phone)) {
             return Rsp.error("验证码已发送，待五分钟或失效后重试");
         }
         //TODO 查询该手机用户是否存在
@@ -41,7 +41,7 @@ public class ValidateCodeServiceImpl implements ValidateCodeService {
         String code = String.valueOf(RandomUtil.randomNumbers(6));
         //TODO 短信发送服务
         //验证码存redis 5分钟有效期
-        redisUtil.hset(AuthConstants.SMS_KEY,phone,code,EXPIRE_TIME);
+        redisUtil.hset(AuthConstants.SMS_LOGIN_CHECK_KEY,phone,code,EXPIRE_TIME);
         return Rsp.ok(code);
     }
 
@@ -53,7 +53,7 @@ public class ValidateCodeServiceImpl implements ValidateCodeService {
      */
     @Override
     public String getCode(String phone) {
-        return (String) redisUtil.hget(AuthConstants.SMS_KEY,phone);
+        return (String) redisUtil.hget(AuthConstants.SMS_LOGIN_CHECK_KEY,phone);
     }
 
     /**
@@ -64,7 +64,7 @@ public class ValidateCodeServiceImpl implements ValidateCodeService {
      */
     @Override
     public Boolean remove(String phone) {
-        redisUtil.hdel(AuthConstants.SMS_KEY,phone);
+        redisUtil.hdel(AuthConstants.SMS_LOGIN_CHECK_KEY,phone);
         return Boolean.TRUE;
     }
 
@@ -78,10 +78,10 @@ public class ValidateCodeServiceImpl implements ValidateCodeService {
     @Override
     public Boolean validate(String code, String phone) {
         //缓存获取当下发送给用户的验证码
-        if (!redisUtil.hHasKey(AuthConstants.SMS_KEY,phone)) {
+        if (!redisUtil.hHasKey(AuthConstants.SMS_LOGIN_CHECK_KEY,phone)) {
             return Boolean.FALSE;
         }
-        String cacheCode = (String) redisUtil.hget(AuthConstants.SMS_KEY,phone);
+        String cacheCode = (String) redisUtil.hget(AuthConstants.SMS_LOGIN_CHECK_KEY,phone);
         if (!code.equals(cacheCode)) {
             return Boolean.FALSE;
         }

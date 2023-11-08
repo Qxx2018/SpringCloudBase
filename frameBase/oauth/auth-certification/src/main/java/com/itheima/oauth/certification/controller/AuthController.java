@@ -38,6 +38,7 @@ import java.util.Objects;
  * 认证中心
  * @author XinXingQian
  */
+@Deprecated
 @Api(tags = "认证中心")
 @RestController
 @RequiredArgsConstructor
@@ -81,6 +82,7 @@ public class AuthController {
     }
 
     /**本系统Oauth**/
+
     @PostMapping("/token")
     @ApiOperation(value = "OAuth2认证-账号密码登入")
     public Rsp<Oauth2TokenVO> passwordModelLogin(
