@@ -3,9 +3,11 @@ package com.itheima.oauth.certification.controller;
 
 import cn.hutool.json.JSONUtil;
 import com.itheima.common.constants.NumConstant;
+import com.itheima.common.utils.RedisUtil;
 import com.itheima.common.vo.Rsp;
 import com.itheima.oauth.certification.business.service.ImageValidateCodeService;
 import com.itheima.oauth.certification.business.service.ValidateCodeService;
+import com.itheima.oauth.certification.constants.AuthConstants;
 import com.itheima.oauth.certification.dto.accredit.PasswordModelLoginDTO;
 import com.itheima.oauth.certification.enums.AuthorizedGrantTypesEnum;
 import com.itheima.oauth.certification.utils.RequestUtil;
@@ -22,7 +24,7 @@ import org.springframework.security.oauth2.common.exceptions.UnapprovedClientAut
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -57,6 +59,8 @@ public class AuthController {
     private ImageValidateCodeService imageValidateCodeService;
     @Resource
     private JdbcClientDetailsService jdbcClientDetailsService;
+    @Resource
+    private RedisUtil<String> redisUtil;
     /**
      * 生成图像验证码
      * @param deviceId
@@ -90,8 +94,13 @@ public class AuthController {
     public Rsp<Oauth2TokenVO> passwordModelLogin(
             @ApiIgnore Principal principal,
             @ApiIgnore HttpServletRequest request,
-            @RequestBody PasswordModelLoginDTO passwordModelLoginDTO
-            ) throws HttpRequestMethodNotSupportedException {
+            @RequestBody @Validated PasswordModelLoginDTO passwordModelLoginDTO
+            ) {
+
+        Object checkCodeObj = redisUtil.hget(AuthConstants.IMG_LOGIN_CHECK_KEY,passwordModelLoginDTO.getDeviceId());
+        if (Objects.isNull(checkCodeObj) || !String.valueOf(checkCodeObj).equals(passwordModelLoginDTO.getCheckCode()) ) {
+            return Rsp.error("图像验证码错误");
+        }
         //获取登入认证的客户端ID
         String[] headers =RequestUtil.clientDetails(request);
         String clientId = headers[NumConstant.NUM_0];
@@ -116,6 +125,7 @@ public class AuthController {
         try {
             OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(token,parameters).getBody();
             Oauth2TokenVO oauth2Token = Oauth2TokenVO.builder().build();
+            assert oAuth2AccessToken != null;
             oauth2Token.setExpiresIn(oAuth2AccessToken.getExpiresIn());
             oauth2Token.setRefreshToken(oAuth2AccessToken.getRefreshToken().getValue());
             oauth2Token.setToken(oAuth2AccessToken.getValue());
