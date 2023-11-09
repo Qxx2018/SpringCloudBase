@@ -14,6 +14,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.UnapprovedClientAuthenticationException;
@@ -30,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotBlank;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -38,7 +41,6 @@ import java.util.Objects;
  * 认证中心
  * @author XinXingQian
  */
-@Deprecated
 @Api(tags = "认证中心")
 @RestController
 @RequiredArgsConstructor
@@ -83,7 +85,7 @@ public class AuthController {
 
     /**本系统Oauth**/
 
-    @PostMapping("/token")
+    @PostMapping("/password/login")
     @ApiOperation(value = "OAuth2认证-账号密码登入")
     public Rsp<Oauth2TokenVO> passwordModelLogin(
             @ApiIgnore Principal principal,
@@ -109,8 +111,10 @@ public class AuthController {
         parameters.put("client_secret",clientSecret);
         parameters.put("username",passwordModelLoginDTO.getUsername());
         parameters.put("password",passwordModelLoginDTO.getPassword());
+        User user = new User(clientId,clientSecret,new ArrayList<>());
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user,null,new ArrayList<>());
         try {
-            OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(principal,parameters).getBody();
+            OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(token,parameters).getBody();
             Oauth2TokenVO oauth2Token = Oauth2TokenVO.builder().build();
             oauth2Token.setExpiresIn(oAuth2AccessToken.getExpiresIn());
             oauth2Token.setRefreshToken(oAuth2AccessToken.getRefreshToken().getValue());

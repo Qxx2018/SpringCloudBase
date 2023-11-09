@@ -26,11 +26,11 @@ public class PasswordModelLoginDTO extends AccreditDTO{
     @NotBlank(message = "登入密码 必填")
     private String password;
 
-    @ApiModelProperty(value = "图像校验码")
-    @NotBlank(message = "图像校验码 必填")
-    private String checkCode;
-
-    @ApiModelProperty(value = "设备码(获取图像校验码的设备码)")
-    @NotBlank(message = "设备码 必填")
-    private String deviceId;
+//    @ApiModelProperty(value = "图像校验码")
+//    @NotBlank(message = "图像校验码 必填")
+//    private String checkCode;
+//
+//    @ApiModelProperty(value = "设备码(获取图像校验码的设备码)")
+//    @NotBlank(message = "设备码 必填")
+//    private String deviceId;
 }
