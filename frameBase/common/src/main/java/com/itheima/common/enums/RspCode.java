@@ -14,11 +14,17 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString(callSuper = true, includeFieldNames = true)
 public enum RspCode {
-    SUCCESS(0, "请求成功"),
-    FAIL(-1, "业务处理失败"),
+    /**
+     * 请求成功
+     */
+    SUCCESS("0", "请求成功"),
+    /**
+     * 业务处理失败
+     */
+    FAIL("-1", "业务处理失败"),
     ;
 
-    private Integer code;
+    private String code;
     private String msg;
 
     /**
@@ -27,7 +33,7 @@ public enum RspCode {
      * @param code
      * @return
      */
-    public static String getMsg(Integer code) {
+    public static String getMsg(String code) {
         for (RspCode apiCodeEnum : RspCode.values()) {
             if (code.equals(apiCodeEnum.getCode())) {
                 return apiCodeEnum.getMsg();

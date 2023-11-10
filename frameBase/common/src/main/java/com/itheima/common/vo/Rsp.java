@@ -1,11 +1,15 @@
 package com.itheima.common.vo;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.itheima.common.enums.RspCode;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author 10445
@@ -17,176 +21,80 @@ public class Rsp<T> implements Serializable {
 
     private static final long serialVersionUID = 8468077357195575790L;
 
-    private Integer code;
+    private String code;
 
     private String msg;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long timestamp;
+
+    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
+    private Date time;
 
     private T data;
 
+    private BusinessInfo businessInfo;
+
     private Exception exception;
 
-    /**
-     * 系统定义的错误返回结果
-     *
-     * @param <T>
-     * @return
-     */
-    public static <T> Rsp<T> error() {
-        return error(RspCode.FAIL.getCode(), RspCode.FAIL.getMsg());
+    public static <T> Rsp<T> error(String resultMsg) {
+        return new Rsp<T>().code(RspCode.FAIL.getCode()).msg(RspCode.FAIL.getMsg())
+                .businessInfo(BusinessInfo.builder().resultMsg(resultMsg).build());
     }
 
-    /**
-     * @param code 传入对应的错误码 自动返回对应错误消息
-     * @param <T>
-     * @return
-     */
-    public static <T> Rsp<T> error(Integer code) {
-        return error(code, RspCode.getMsg(code));
+    public static <T> Rsp<T> error(String resultMsg,Exception e) {
+        return new Rsp<T>().code(RspCode.FAIL.getCode()).msg(RspCode.FAIL.getMsg())
+                .businessInfo(BusinessInfo.builder().resultMsg(resultMsg).build())
+                .exception(e);
     }
 
-    /**
-     * 自定义返回错误结果 默认错误码为1 业务处理失败
-     *
-     * @param message
-     * @param <T>
-     * @return
-     */
-    public static <T> Rsp<T> error(String message) {
-        return error(RspCode.FAIL.getCode(), message);
+    public static <T> Rsp<T> error(Exception e) {
+        return new Rsp<T>().code(RspCode.FAIL.getCode()).msg(RspCode.FAIL.getMsg())
+                .exception(e);
     }
 
-    /**
-     * @param rspCode 传入对应的错误码枚举 自动返回对应错误消息
-     * @param <T>
-     * @return
-     */
-    public static <T> Rsp<T> error(RspCode rspCode) {
-        return error(rspCode.getCode(), rspCode.getMsg());
+    public static <T> Rsp<T> error(String resultCode, String resultMsg) {
+        return new Rsp<T>().code(RspCode.FAIL.getCode()).msg(RspCode.FAIL.getMsg())
+                .businessInfo(BusinessInfo.builder().resultCode(resultCode).resultMsg(resultMsg).build());
     }
 
-    /**
-     * @param rspCode 传入对应的错误码枚举 自动返回对应错误消息
-     * @param data
-     * @param e
-     * @param <T>
-     * @return
-     */
-    public static <T> Rsp<T> error(RspCode rspCode, T data, Exception e) {
-        return error(rspCode.getCode(), rspCode.getMsg(), data, e);
+    public static <T> Rsp<T> error(RspCode rspCode, String resultCode, String resultMsg) {
+        return new Rsp<T>().code(rspCode.getCode()).msg(rspCode.getMsg())
+                .businessInfo(BusinessInfo.builder().resultCode(resultCode).resultMsg(resultMsg).build());
     }
 
-    /**
-     * 使用系统默认错误码 传入错误返回结果
-     *
-     * @param <T>
-     * @return
-     */
-    public static <T> Rsp<T> error(T data) {
-        return new Rsp<T>().data(data).code(RspCode.FAIL.getCode()).msg(RspCode.FAIL.getMsg());
+    public static <T> Rsp<T> error(String resultCode, String resultMsg, T data) {
+        return new Rsp<T>().code(RspCode.FAIL.getCode()).msg(RspCode.FAIL.getMsg())
+                .businessInfo(BusinessInfo.builder().resultCode(resultCode).resultMsg(resultMsg).build());
     }
 
-    /**
-     * 全部自定义消息 与错误码
-     *
-     * @param code
-     * @param message
-     * @param <T>
-     * @return
-     */
-    public static <T> Rsp<T> error(Integer code, String message) {
-        return new Rsp<T>().code(code).msg(message);
+    public static <T> Rsp<T> error(String resultCode, String resultMsg, Exception e) {
+        return new Rsp<T>().code(RspCode.FAIL.getCode()).msg(RspCode.FAIL.getMsg())
+                .businessInfo(BusinessInfo.builder().resultCode(resultCode).resultMsg(resultMsg).build())
+                .exception(e);
     }
 
-    /**
-     * 传入对应错误吗和相关的错误返回结果
-     *
-     * @param code
-     * @param <T>
-     * @return
-     */
-    public static <T> Rsp<T> error(Integer code, T data) {
-        return new Rsp<T>().code(code).data(data);
-    }
-
-    /**
-     * 传入对应错误信息和相关的错误返回结果
-     *
-     * @param message
-     * @param <T>
-     * @return
-     */
-    public static <T> Rsp<T> error(String message, T data) {
-        return new Rsp<T>().code(RspCode.FAIL.getCode()).msg(message).data(data);
-    }
-
-    /**
-     * 全部自定义
-     *
-     * @param code
-     * @param message
-     * @param <T>
-     * @return
-     */
-    public static <T> Rsp<T> error(Integer code, String message, T data) {
-        return new Rsp<T>().data(data).code(code).msg(message);
-    }
-
-    /**
-     * 全部自定义
-     *
-     * @param code
-     * @param message
-     * @param <T>
-     * @return
-     */
-    public static <T> Rsp<T> error(Integer code, String message, T data, Exception e) {
-        return new Rsp<T>().data(data).code(code).msg(message).exception(e);
+    public static <T> Rsp<T> error(String resultCode, String resultMsg, T data, Exception e) {
+        return new Rsp<T>().code(RspCode.FAIL.getCode()).msg(RspCode.FAIL.getMsg())
+                .businessInfo(BusinessInfo.builder().resultCode(resultCode).resultMsg(resultMsg).build())
+                .data(data).exception(e);
     }
 
     public static <T> Rsp<T> ok() {
         return new Rsp<T>().code(RspCode.SUCCESS.getCode()).msg(RspCode.SUCCESS.getMsg());
     }
 
-    /**
-     * 请求成功 默认code为0 掺入对应的返回结果
-     *
-     * @param <T>
-     * @return
-     */
     public static <T> Rsp<T> ok(T data) {
         return new Rsp<T>().data(data).code(RspCode.SUCCESS.getCode()).msg(RspCode.SUCCESS.getMsg());
     }
 
-    /**
-     * 传入对应的成功枚举 和数据
-     * @param rspCode
-     * @param data
-     * @param <T>
-     * @return
-     */
-    public static <T> Rsp<T> ok(RspCode rspCode, T data) {
-        return new Rsp<T>().code(rspCode.getCode()).msg(rspCode.getMsg()).data(data);
-    }
-
-    /**
-     * 自定义ok
-     * @param code
-     * @param message
-     * @param data
-     * @param <T>
-     * @return
-     */
-    public static <T> Rsp<T> ok(Integer code, String message, T data) {
-        return new Rsp<T>().data(data).code(code).msg(message);
-    }
-
     public Rsp() {
-        this.timestamp = System.currentTimeMillis();
+        this.time = DateUtil.date();
+        this.timestamp = this.time.getTime();
+        
     }
 
-    public Rsp<T> code(Integer code) {
+    public Rsp<T> code(String code) {
         this.code = code;
         return this;
     }
@@ -206,10 +114,29 @@ public class Rsp<T> implements Serializable {
         return this;
     }
 
+    public Rsp<T> businessInfo(BusinessInfo businessInfo) {
+        this.businessInfo = businessInfo;
+        return this;
+    }
+
     public boolean isOK() {
         if (null != this.code && this.code.equals(RspCode.SUCCESS.getCode())) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 异常码
+     */
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BusinessInfo {
+
+        private String resultCode;
+
+        private String resultMsg;
     }
 }

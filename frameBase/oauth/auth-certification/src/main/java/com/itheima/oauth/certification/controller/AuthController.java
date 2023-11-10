@@ -3,13 +3,16 @@ package com.itheima.oauth.certification.controller;
 
 import cn.hutool.json.JSONUtil;
 import com.itheima.common.constants.NumConstant;
+import com.itheima.common.enums.BusinessExceptionEnums;
 import com.itheima.common.utils.RedisUtil;
 import com.itheima.common.vo.Rsp;
 import com.itheima.oauth.certification.business.service.ImageValidateCodeService;
 import com.itheima.oauth.certification.business.service.ValidateCodeService;
 import com.itheima.oauth.certification.constants.AuthConstants;
 import com.itheima.oauth.certification.dto.accredit.PasswordModelLoginDTO;
+import com.itheima.oauth.certification.dto.accredit.SmsModelLoginDTO;
 import com.itheima.oauth.certification.enums.AuthorizedGrantTypesEnum;
+import com.itheima.oauth.certification.extension.authchannels.sms.SmsCodeAuthenticationToken;
 import com.itheima.oauth.certification.utils.RequestUtil;
 import com.itheima.oauth.certification.vo.Oauth2TokenVO;
 import io.swagger.annotations.Api;
@@ -25,6 +28,7 @@ import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -95,11 +99,11 @@ public class AuthController {
             @ApiIgnore Principal principal,
             @ApiIgnore HttpServletRequest request,
             @RequestBody @Validated PasswordModelLoginDTO passwordModelLoginDTO
-            ) {
+            ) throws HttpRequestMethodNotSupportedException {
 
         Object checkCodeObj = redisUtil.hget(AuthConstants.IMG_LOGIN_CHECK_KEY,passwordModelLoginDTO.getDeviceId());
         if (Objects.isNull(checkCodeObj) || !String.valueOf(checkCodeObj).equals(passwordModelLoginDTO.getCheckCode()) ) {
-            return Rsp.error("图像验证码错误");
+            return Rsp.error(BusinessExceptionEnums.IMG_CHECK_ERROR.getCode(),BusinessExceptionEnums.IMG_CHECK_ERROR.getMsg());
         }
         //获取登入认证的客户端ID
         String[] headers =RequestUtil.clientDetails(request);
@@ -122,21 +126,59 @@ public class AuthController {
         parameters.put("password",passwordModelLoginDTO.getPassword());
         User user = new User(clientId,clientSecret,new ArrayList<>());
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user,null,new ArrayList<>());
-        try {
-            OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(token,parameters).getBody();
-            Oauth2TokenVO oauth2Token = Oauth2TokenVO.builder().build();
-            assert oAuth2AccessToken != null;
-            oauth2Token.setExpiresIn(oAuth2AccessToken.getExpiresIn());
-            oauth2Token.setRefreshToken(oAuth2AccessToken.getRefreshToken().getValue());
-            oauth2Token.setToken(oAuth2AccessToken.getValue());
-            return Rsp.ok(oauth2Token);
-        }
-        catch (Exception e) {
-            log.error(e.toString());
-            throw new UnapprovedClientAuthenticationException("账号密码认证授权失败");
-        }
+
+        OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(token,parameters).getBody();
+        Oauth2TokenVO oauth2Token = Oauth2TokenVO.builder().build();
+        assert oAuth2AccessToken != null;
+        oauth2Token.setExpiresIn(oAuth2AccessToken.getExpiresIn());
+        oauth2Token.setRefreshToken(oAuth2AccessToken.getRefreshToken().getValue());
+        oauth2Token.setToken(oAuth2AccessToken.getValue());
+        return Rsp.ok(oauth2Token);
+
 
     }
+
+    @PostMapping("sms/login")
+    @ApiOperation(value = "OAuth2认证-手机号登入")
+    public Rsp<Oauth2TokenVO> smsModelLogin(
+            @ApiIgnore Principal principal,
+            @ApiIgnore HttpServletRequest request,
+            @RequestBody @Validated SmsModelLoginDTO smsModelLoginDTO
+    ) throws HttpRequestMethodNotSupportedException {
+        //获取登入认证的客户端ID
+        String[] headers =RequestUtil.clientDetails(request);
+        String clientId = headers[NumConstant.NUM_0];
+        String clientSecret = headers[NumConstant.NUM_1];
+        log.info("OAuth认证授权 客户端ID:{}，请求参数：{}", clientId, JSONUtil.toJsonStr(smsModelLoginDTO));
+        //校验客户端
+        ClientDetails clientDetails = jdbcClientDetailsService.loadClientByClientId(clientId);
+        if (Objects.isNull(clientDetails)) {
+            throw new UnapprovedClientAuthenticationException("客户端ID:"+clientId+"未查到");
+        }
+        if (!passwordEncoder.matches(clientSecret,clientDetails.getClientSecret())) {
+            throw new UnapprovedClientAuthenticationException("客户端的访问密钥不匹配");
+        }
+        Map<String,String> parameters = new HashMap<>();
+        parameters.put("grant_type", AuthorizedGrantTypesEnum.SMS_CODE.getCode());
+        parameters.put("client_id",clientId);
+        parameters.put("client_secret",clientSecret);
+        parameters.put("mobile",smsModelLoginDTO.getPhone());
+        parameters.put("code",smsModelLoginDTO.getSmsCode());
+        User user = new User(clientId,clientSecret,new ArrayList<>());
+        SmsCodeAuthenticationToken token = new SmsCodeAuthenticationToken(user,null,new ArrayList<>());
+
+        OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(token,parameters).getBody();
+        Oauth2TokenVO oauth2Token = Oauth2TokenVO.builder().build();
+        assert oAuth2AccessToken != null;
+        oauth2Token.setExpiresIn(oAuth2AccessToken.getExpiresIn());
+        oauth2Token.setRefreshToken(oAuth2AccessToken.getRefreshToken().getValue());
+        oauth2Token.setToken(oAuth2AccessToken.getValue());
+        return Rsp.ok(oauth2Token);
+
+
+    }
+
+
 
     /**作为第三方系统的OAuth**/
 }

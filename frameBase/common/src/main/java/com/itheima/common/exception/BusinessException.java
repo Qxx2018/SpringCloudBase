@@ -1,5 +1,6 @@
 package com.itheima.common.exception;
 
+import com.itheima.common.enums.BusinessExceptionEnums;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,6 +24,10 @@ public class BusinessException extends RuntimeException{
     public BusinessException(String code, String msg) {
         super(msg);
         this.code = code;
+    }
+    public BusinessException(BusinessExceptionEnums businessExceptionEnums) {
+        super(businessExceptionEnums.getMsg());
+        this.code = businessExceptionEnums.getCode().toString();
     }
 
 

@@ -1,5 +1,6 @@
 package com.itheima.oauth.certification.extension.authchannels.sms;
 
+import com.itheima.common.enums.BusinessExceptionEnums;
 import com.itheima.common.exception.BusinessException;
 import com.itheima.oauth.certification.business.impl.LoginCertificationServiceImpl;
 import com.itheima.oauth.certification.business.service.ValidateCodeService;
@@ -36,7 +37,7 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
         String mobile = (String) authenticationToken.getPrincipal();
         String code = (String) authenticationToken.getCredentials();
         if(!validateCodeService.validate(code,mobile)) {
-            throw new BusinessException("验证码不正确，尝试重新发起");
+            throw new BusinessException(BusinessExceptionEnums.SMS_ERROR);
         }
         //Core interface which loads user-specific data.
         //加载用户特定数据的核心接口 登入校验成功后返回用户权限资源

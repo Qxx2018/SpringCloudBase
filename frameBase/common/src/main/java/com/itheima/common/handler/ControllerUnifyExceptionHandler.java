@@ -1,6 +1,7 @@
 package com.itheima.common.handler;
 
 import com.itheima.common.enums.BusinessExceptionEnums;
+import com.itheima.common.exception.BusinessException;
 import com.itheima.common.vo.Rsp;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,11 +34,15 @@ public class ControllerUnifyExceptionHandler {
      * 其他异常处理
      */
     @ResponseStatus(HttpStatus.OK)
-    @ExceptionHandler({Exception.class})
+    @ExceptionHandler({Exception.class, BusinessException.class})
     @ResponseBody
     public Rsp otherExceptionHandler(HttpServletRequest request, Exception e) {
         log.info("===========其他异常处理=========");
-        return Rsp.error(e.getMessage());
+        log.error(e.toString());
+        if (e instanceof BusinessException) {
+            return Rsp.error(((BusinessException) e).getCode(),e.getMessage(),e);
+        }
+        return Rsp.error(e.getMessage(),e);
     }
 
     /**
@@ -48,8 +53,9 @@ public class ControllerUnifyExceptionHandler {
     @ResponseBody
     public Rsp sqlExceptionHandler(HttpServletRequest request, SQLException e) {
         log.info("===========数据库异常处理=========");
+        log.error(e.toString());
         //TODO 推送mq--记录每次异常
-        return Rsp.error(BusinessExceptionEnums.DATABASE_ERROR.getCode(),BusinessExceptionEnums.DATABASE_ERROR.getMsg()+e.getMessage());
+        return Rsp.error(BusinessExceptionEnums.DATABASE_ERROR.getCode(),BusinessExceptionEnums.DATABASE_ERROR.getMsg(),e);
     }
 
     /**
@@ -71,26 +77,27 @@ public class ControllerUnifyExceptionHandler {
     @ResponseBody
     public Rsp requestParamExceptionHandler(HttpServletRequest request, Exception e) {
         log.info("===========请求参数异常处理=============");
+        log.error(e.toString());
         //TODO 推送mq--记录每次异常
         String errorMsg = "";
         if (e instanceof BindException) {
             errorMsg = Objects.requireNonNull(((BindException) e).getBindingResult().getFieldError()).getDefaultMessage();
-            return Rsp.error(BusinessExceptionEnums.REQUEST_PARAM_ERROR.getCode(), BusinessExceptionEnums.REQUEST_PARAM_ERROR.getMsg() + errorMsg);
+            return Rsp.error(BusinessExceptionEnums.REQUEST_PARAM_ERROR.getCode(), BusinessExceptionEnums.REQUEST_PARAM_ERROR.getMsg(),e);
         }
         if (e instanceof MethodArgumentNotValidException) {
             errorMsg = Objects.requireNonNull(((MethodArgumentNotValidException) e).getBindingResult().getFieldError()).getDefaultMessage();
-            return Rsp.error(BusinessExceptionEnums.REQUEST_PARAM_ERROR.getCode(), BusinessExceptionEnums.REQUEST_PARAM_ERROR.getMsg() + errorMsg);
+            return Rsp.error(BusinessExceptionEnums.REQUEST_PARAM_ERROR.getCode(), BusinessExceptionEnums.REQUEST_PARAM_ERROR.getMsg(),e);
         }
         if (e instanceof ConstraintViolationException) {
-            return Rsp.error(BusinessExceptionEnums.REQUEST_PARAM_ERROR.getCode(), BusinessExceptionEnums.REQUEST_PARAM_ERROR.getMsg() + e.getMessage());
+            return Rsp.error(BusinessExceptionEnums.REQUEST_PARAM_ERROR.getCode(), BusinessExceptionEnums.REQUEST_PARAM_ERROR.getMsg(),e);
         }
         if (e instanceof HttpMessageNotReadableException) {
-            return Rsp.error(BusinessExceptionEnums.PARAM_FORMAT_ERROR.getCode(), BusinessExceptionEnums.PARAM_FORMAT_ERROR.getMsg() + e.getMessage());
+            return Rsp.error(BusinessExceptionEnums.PARAM_FORMAT_ERROR.getCode(), BusinessExceptionEnums.PARAM_FORMAT_ERROR.getMsg(),e);
         }
         if (e instanceof IllegalArgumentException) {
-            return Rsp.error(BusinessExceptionEnums.PARAM_ILLEGALITY_ERROR.getCode(), BusinessExceptionEnums.PARAM_ILLEGALITY_ERROR.getMsg() + e.getMessage());
+            return Rsp.error(BusinessExceptionEnums.PARAM_ILLEGALITY_ERROR.getCode(), BusinessExceptionEnums.PARAM_ILLEGALITY_ERROR.getMsg(),e);
         }
-        return Rsp.error(e.getMessage());
+        return Rsp.error(e.getMessage(),e);
     }
     /**
      * 请求方法不支持
@@ -100,7 +107,8 @@ public class ControllerUnifyExceptionHandler {
     @ResponseBody
     public Rsp httpRequestMethodNotSupportedExceptionHandler(HttpServletRequest request, HttpRequestMethodNotSupportedException e) {
         log.info("=====================请求方法不支持============================");
-        return Rsp.error(BusinessExceptionEnums.REQUEST_METHOD_NOT_SUPPORT_ERROR.getCode(),BusinessExceptionEnums.REQUEST_METHOD_NOT_SUPPORT_ERROR.getMsg()+e.getMessage());
+        log.error(e.toString());
+        return Rsp.error(BusinessExceptionEnums.REQUEST_METHOD_NOT_SUPPORT_ERROR.getCode(),BusinessExceptionEnums.REQUEST_METHOD_NOT_SUPPORT_ERROR.getMsg(),e);
     }
     /**
      * 请求媒体类型不支持
@@ -110,6 +118,7 @@ public class ControllerUnifyExceptionHandler {
     @ResponseBody
     public Rsp httpRequestMethodNotSupportedExceptionHandler(HttpServletRequest request, HttpMediaTypeNotSupportedException e) {
         log.info("=====================请求媒体类型不支持============================");
-        return Rsp.error(BusinessExceptionEnums.MEDIA_TYPE_NOT_SUPPORT.getCode(),BusinessExceptionEnums.MEDIA_TYPE_NOT_SUPPORT.getMsg()+e.getMessage());
+        log.error(e.toString());
+        return Rsp.error(BusinessExceptionEnums.MEDIA_TYPE_NOT_SUPPORT.getCode(),BusinessExceptionEnums.MEDIA_TYPE_NOT_SUPPORT.getMsg(),e);
     }
 }
