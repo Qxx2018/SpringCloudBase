@@ -103,7 +103,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //除上面匹配任何请求都需要授权
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().permitAll()
+                .formLogin()
+                .loginPage("/login.html")
+                .loginProcessingUrl("/login")
+                .permitAll()
                 .and()
                 //自定义认证
                 //.apply()

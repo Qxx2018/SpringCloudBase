@@ -1,7 +1,6 @@
 package com.itheima.common.handler;
 
 import com.itheima.common.enums.BusinessExceptionEnums;
-import com.itheima.common.exception.BusinessException;
 import com.itheima.common.vo.Rsp;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,21 +28,6 @@ import java.util.Objects;
 @Component
 @ControllerAdvice
 public class ControllerUnifyExceptionHandler {
-
-    /**
-     * 其他异常处理
-     */
-    @ResponseStatus(HttpStatus.OK)
-    @ExceptionHandler({Exception.class, BusinessException.class})
-    @ResponseBody
-    public Rsp otherExceptionHandler(HttpServletRequest request, Exception e) {
-        log.info("===========其他异常处理=========");
-        log.error(e.toString());
-        if (e instanceof BusinessException) {
-            return Rsp.error(((BusinessException) e).getCode(),e.getMessage(),e);
-        }
-        return Rsp.error(e.getMessage(),e);
-    }
 
     /**
      * 数据库异常处理

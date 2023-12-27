@@ -31,6 +31,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,7 @@ import java.util.Objects;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     @Resource
-    private JdbcClientDetailsServiceImpl jdbcClientDetailsService;
+    private DataSource dataSource;
     @Resource
     private AuthenticationManager authenticationManager;
     @Resource
@@ -67,7 +68,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 //要是让/oauth/token支持client_id和client_secret做登陆认证
                 //如果开启了allowFormAuthenticationForClients，那么就在BasicAuthenticationFilter之前,添加ClientCredentialsTokenEndpointFilter,使用ClientDetailsUserDetailsService来进行登陆认证
                 .allowFormAuthenticationForClients()
-                .checkTokenAccess("permitAll()");
+                // /oauth/check_token公开
+                .checkTokenAccess("permitAll()")
+                // /oauth/token_key公开
+                .tokenKeyAccess("isAuthenticated()");
     }
 
     /**
@@ -79,6 +83,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+        JdbcClientDetailsServiceImpl jdbcClientDetailsService = new JdbcClientDetailsServiceImpl(dataSource);
+        //TODO 可以自定义客户端查询的SQL（如果修改了字段）
         clients.withClientDetails(jdbcClientDetailsService);
     }
 
@@ -108,6 +114,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 )
         );
         endpoints
+                // 端口映射
+                //.pathMapping("/oauth/token","/login/authorizationCode")
                 .authenticationManager(authenticationManager)
                 //jwt增强，自定义的加密算法对token签名
                 .accessTokenConverter(jwtAccessTokenConverter())
@@ -117,9 +125,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .tokenGranter(compositeTokenGranter)
                 .userDetailsService(loginCertificationService)
                 //refresh token 重复使用
-                .reuseRefreshTokens(true)
+                .reuseRefreshTokens(false)
         ;
-
     }
 
     /**

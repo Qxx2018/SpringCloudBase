@@ -1,7 +1,9 @@
 package com.itheima.oauth.certification.controller;
 
 
+import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.itheima.common.constants.NumConstant;
 import com.itheima.common.enums.BusinessExceptionEnums;
 import com.itheima.common.utils.RedisUtil;
@@ -9,6 +11,7 @@ import com.itheima.common.vo.Rsp;
 import com.itheima.oauth.certification.business.service.ImageValidateCodeService;
 import com.itheima.oauth.certification.business.service.ValidateCodeService;
 import com.itheima.oauth.certification.constants.AuthConstants;
+import com.itheima.oauth.certification.dto.accredit.AuthorizationCodeModelLoginDTO;
 import com.itheima.oauth.certification.dto.accredit.PasswordModelLoginDTO;
 import com.itheima.oauth.certification.dto.accredit.SmsModelLoginDTO;
 import com.itheima.oauth.certification.enums.AuthorizedGrantTypesEnum;
@@ -27,6 +30,7 @@ import org.springframework.security.oauth2.common.exceptions.UnapprovedClientAut
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
@@ -91,9 +95,9 @@ public class AuthController {
         return validateCodeService.sendSmsCode(phone);
     }
 
-    /**本系统Oauth**/
+    /**本系统登入**/
 
-    @PostMapping("/password/login")
+    @PostMapping("/login/password")
     @ApiOperation(value = "OAuth2认证-账号密码登入")
     public Rsp<Oauth2TokenVO> passwordModelLogin(
             @ApiIgnore Principal principal,
@@ -138,7 +142,7 @@ public class AuthController {
 
     }
 
-    @PostMapping("sms/login")
+    @PostMapping("/login/sms")
     @ApiOperation(value = "OAuth2认证-手机号登入")
     public Rsp<Oauth2TokenVO> smsModelLogin(
             @ApiIgnore Principal principal,
@@ -177,8 +181,70 @@ public class AuthController {
 
 
     }
+    /**访问第三方授权登入*/
+    @GetMapping("/accessing/third/callback")
+    @ApiOperation(value = "访问第三方授权回调")
+    public Rsp<?> accessingThirdCallback(@ApiIgnore Principal principal,
+                                         @ApiIgnore HttpServletRequest request,
+                                         @RequestParam("code") String code) throws HttpRequestMethodNotSupportedException {
+
+        //TODO 访问第三方oauth鉴权
+        AuthorizationCodeModelLoginDTO codeModelLogin = new AuthorizationCodeModelLoginDTO();
+        codeModelLogin.setCode(code);
+        codeModelLogin.setRedirectUri(request.getRequestURL().toString());
+        String result = HttpRequest
+                .post("127.0.0.1:9803/oauth/login/authorizationCode")
+                .body(JSONObject.toJSONString(codeModelLogin))
+                .header("Authorization","Basic RDQyMzcxM0JGMUE3QTpxclJnbjhzTUpYRlhUQWw3SDB1blJSWWZSRjFWbTEwVg==")
+                .execute().body();
+        log.info("访问第三方授权回调RESULT:{}",result);
+        return Rsp.ok();
+    }
+
+    /**第三方访问授权登入**/
+
+    @PostMapping("/login/authorizationCode")
+    @ApiOperation(value = "OAuth2认证-授权登入")
+    public Rsp<Oauth2TokenVO> token(
+            @ApiIgnore Principal principal,
+            @ApiIgnore HttpServletRequest request,
+            @RequestBody @Validated AuthorizationCodeModelLoginDTO authorizationCodeModelLoginDTO) throws HttpRequestMethodNotSupportedException {
+        //获取登入认证的客户端ID
+        String[] headers =RequestUtil.clientDetails(request);
+        String clientId = headers[NumConstant.NUM_0];
+        String clientSecret = headers[NumConstant.NUM_1];
+        log.info("OAuth认证授权 客户端ID:{}，请求参数：{}", clientId, JSONUtil.toJsonStr(authorizationCodeModelLoginDTO));
+        //校验客户端
+        ClientDetails clientDetails = jdbcClientDetailsService.loadClientByClientId(clientId);
+        if (Objects.isNull(clientDetails)) {
+            throw new UnapprovedClientAuthenticationException("客户端ID:"+clientId+"未查到");
+        }
+        if (!passwordEncoder.matches(clientSecret,clientDetails.getClientSecret())) {
+            throw new UnapprovedClientAuthenticationException("客户端的访问密钥不匹配");
+        }
+        Map<String,String> parameters = new HashMap<>();
+        parameters.put("grant_type", AuthorizedGrantTypesEnum.AUTHORIZATION_CODE.getCode());
+        parameters.put("client_id",clientId);
+        parameters.put("client_secret",clientSecret);
+        parameters.put("code",authorizationCodeModelLoginDTO.getCode());
+        parameters.put("redirect_uri",authorizationCodeModelLoginDTO.getRedirectUri());
+        User user = new User(clientId,clientSecret,new ArrayList<>());
+        //PreAuthenticatedAuthenticationToken是一种Authentication实现，继承AbstractAuthenticationToken抽象类，用于预认证身份验证。
+        //有些情况下，希望使用Spring Security进行授权，但是在访问应用程序之前，用户已经被某个外部系统可靠地验证过了，将这种情况称为预认证场景，
+        //比如CSDN可以使用其他平台的账号进行登陆
+        //————————————————
+        PreAuthenticatedAuthenticationToken token = new PreAuthenticatedAuthenticationToken(user,null,new ArrayList<>());
+        OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(token,parameters).getBody();
+        Oauth2TokenVO oauth2Token = Oauth2TokenVO.builder().build();
+        assert oAuth2AccessToken != null;
+        oauth2Token.setExpiresIn(oAuth2AccessToken.getExpiresIn());
+        oauth2Token.setRefreshToken(oAuth2AccessToken.getRefreshToken().getValue());
+        oauth2Token.setToken(oAuth2AccessToken.getValue());
+        return Rsp.ok(oauth2Token);
+    }
 
 
 
-    /**作为第三方系统的OAuth**/
+
+
 }
