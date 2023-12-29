@@ -55,7 +55,7 @@ public class DynamicRouteServiceImplByNacos {
             }
         }
         catch (Exception e) {
-            log.error("初始化网关路由发生错误",e);
+            log.error("初始化网关路由发生错误=>{}",e.toString());
         }
         dynamicRouteByNacosListener(DynamicRouteConfig.NACOS_ROUTE_DATA_ID,DynamicRouteConfig.NACOS_ROUTE_GROUP);
     }
@@ -72,7 +72,7 @@ public class DynamicRouteServiceImplByNacos {
 
         }
         catch (Exception e) {
-            log.error("初始化网关路由时发生错误",e);
+            log.error("初始化网关路由时发生错误=>{}",e.toString());
             return null;
         }
     }
@@ -102,7 +102,7 @@ public class DynamicRouteServiceImplByNacos {
             );
         }
         catch (NacosException e) {
-            log.error("从nacos接收动态路由配置出错！",e);
+            log.error("从nacos接收动态路由配置出错！=>{}",e.toString());
         }
     }
 
@@ -122,7 +122,7 @@ public class DynamicRouteServiceImplByNacos {
             }
             return definitions;
         } catch (NacosException e) {
-            log.error("获取动态路由失败",e);
+            log.error("获取动态路由失败=>{}",e.toString());
         }
         return definitions;
     }

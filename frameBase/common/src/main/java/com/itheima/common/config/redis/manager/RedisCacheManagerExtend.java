@@ -2,8 +2,8 @@ package com.itheima.common.config.redis.manager;
 
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
-import com.itheima.common.constants.NumConstant;
-import com.itheima.common.enums.SpecialCharEnum;
+import com.itheima.sys.core.constants.NumConstant;
+import com.itheima.sys.core.enums.SpecialCharEnum;
 import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.itheima.common.enums.GenderEnum;
+import com.itheima.sys.core.enums.GenderEnum;
 import com.itheima.common.model.BaseModelWithTenant;
 import lombok.*;
 import lombok.experimental.Accessors;

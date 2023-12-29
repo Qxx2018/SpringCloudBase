@@ -3,7 +3,7 @@ package com.itheima.oauth.certification.business.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.itheima.common.constants.Constant;
+import com.itheima.sys.core.constants.Constant;
 import com.itheima.oauth.certification.business.service.PermissionInformationService;
 import com.itheima.oauth.certification.dto.PermissionDTO;
 import com.itheima.oauth.certification.models.*;

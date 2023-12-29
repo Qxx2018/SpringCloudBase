@@ -1,4 +1,4 @@
-package com.itheima.common.constants;
+package com.itheima.sys.core.constants;
 
 /**
  * 数值静态常量

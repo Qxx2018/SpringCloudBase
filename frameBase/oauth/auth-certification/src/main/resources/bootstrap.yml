@@ -4,7 +4,7 @@ spring:
   profiles:
     active: dev
   application:
-    name: oauth-certification-service
+    name: oauth-certification
 mybatis-plus:
   mapper-locations: classpath:com/itheima/**/mapper/*Mapper.xml
   #实体扫描，多个package用逗号分割

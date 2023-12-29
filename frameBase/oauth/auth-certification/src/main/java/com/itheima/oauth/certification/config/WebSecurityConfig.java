@@ -25,7 +25,7 @@ import java.util.List;
  * @author XinXingQian
  */
 @EnableWebSecurity
-@ConfigurationProperties("sc.white")
+@ConfigurationProperties("sc.white.oauth")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Resource
@@ -104,7 +104,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login.html")
+                .loginPage("/login")
                 .loginProcessingUrl("/login")
                 .permitAll()
                 .and()

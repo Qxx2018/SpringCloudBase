@@ -1,7 +1,7 @@
 package com.itheima.common.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.itheima.common.constants.Constant;
+import com.itheima.sys.core.constants.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.context.annotation.Configuration;

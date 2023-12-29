@@ -1,6 +1,6 @@
 package com.itheima.oauth.certification.business.service;
 
-import com.itheima.common.vo.Rsp;
+import com.itheima.sys.core.resp.Rsp;
 
 /**
  * 手机验证码服务

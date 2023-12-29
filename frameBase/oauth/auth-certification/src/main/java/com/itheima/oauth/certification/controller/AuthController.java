@@ -4,13 +4,13 @@ package com.itheima.oauth.certification.controller;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.itheima.common.constants.NumConstant;
-import com.itheima.common.enums.BusinessExceptionEnums;
+import com.itheima.sys.core.constants.NumConstant;
+import com.itheima.sys.core.enums.BusinessExceptionEnums;
 import com.itheima.common.utils.RedisUtil;
-import com.itheima.common.vo.Rsp;
+import com.itheima.sys.core.resp.Rsp;
 import com.itheima.oauth.certification.business.service.ImageValidateCodeService;
 import com.itheima.oauth.certification.business.service.ValidateCodeService;
-import com.itheima.oauth.certification.constants.AuthConstants;
+import com.itheima.sys.core.constants.CacheConstant;
 import com.itheima.oauth.certification.dto.accredit.AuthorizationCodeModelLoginDTO;
 import com.itheima.oauth.certification.dto.accredit.PasswordModelLoginDTO;
 import com.itheima.oauth.certification.dto.accredit.SmsModelLoginDTO;
@@ -105,7 +105,7 @@ public class AuthController {
             @RequestBody @Validated PasswordModelLoginDTO passwordModelLoginDTO
             ) throws HttpRequestMethodNotSupportedException {
 
-        Object checkCodeObj = redisUtil.hget(AuthConstants.IMG_LOGIN_CHECK_KEY,passwordModelLoginDTO.getDeviceId());
+        Object checkCodeObj = redisUtil.hget(CacheConstant.IMG_LOGIN_CHECK_KEY,passwordModelLoginDTO.getDeviceId());
         if (Objects.isNull(checkCodeObj) || !String.valueOf(checkCodeObj).equals(passwordModelLoginDTO.getCheckCode()) ) {
             return Rsp.error(BusinessExceptionEnums.IMG_CHECK_ERROR.getCode(),BusinessExceptionEnums.IMG_CHECK_ERROR.getMsg());
         }
@@ -184,21 +184,21 @@ public class AuthController {
     /**访问第三方授权登入*/
     @GetMapping("/accessing/third/callback")
     @ApiOperation(value = "访问第三方授权回调")
-    public Rsp<?> accessingThirdCallback(@ApiIgnore Principal principal,
+    public Rsp<String> accessingThirdCallback(@ApiIgnore Principal principal,
                                          @ApiIgnore HttpServletRequest request,
                                          @RequestParam("code") String code) throws HttpRequestMethodNotSupportedException {
 
         //TODO 访问第三方oauth鉴权
         AuthorizationCodeModelLoginDTO codeModelLogin = new AuthorizationCodeModelLoginDTO();
         codeModelLogin.setCode(code);
-        codeModelLogin.setRedirectUri(request.getRequestURL().toString());
+        codeModelLogin.setRedirectUri("http://127.0.0.1:9310/oauth-certification/oauth/accessing/third/callback");
         String result = HttpRequest
-                .post("127.0.0.1:9803/oauth/login/authorizationCode")
+                .post("http://127.0.0.1:9310/oauth-certification/oauth/login/authorizationCode")
                 .body(JSONObject.toJSONString(codeModelLogin))
                 .header("Authorization","Basic RDQyMzcxM0JGMUE3QTpxclJnbjhzTUpYRlhUQWw3SDB1blJSWWZSRjFWbTEwVg==")
                 .execute().body();
         log.info("访问第三方授权回调RESULT:{}",result);
-        return Rsp.ok();
+        return Rsp.ok(result);
     }
 
     /**第三方访问授权登入**/

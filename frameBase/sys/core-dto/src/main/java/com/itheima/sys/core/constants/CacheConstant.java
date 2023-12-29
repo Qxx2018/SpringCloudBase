@@ -1,10 +1,10 @@
-package com.itheima.oauth.certification.constants;
+package com.itheima.sys.core.constants;
 
 /**
- * 认证服务常量
+ * 缓存存储常量
  * @author XinXingQian
  */
-public class AuthConstants {
+public class CacheConstant {
     /**
      * 用户权限缓存key
      */

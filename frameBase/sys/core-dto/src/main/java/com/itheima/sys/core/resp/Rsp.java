@@ -1,11 +1,12 @@
-package com.itheima.common.vo;
+package com.itheima.sys.core.resp;
 
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.itheima.common.enums.RspCode;
+import com.itheima.sys.core.enums.BusinessExceptionEnums;
+import com.itheima.sys.core.enums.RspCode;
 import lombok.*;
 
 import java.io.Serializable;
@@ -78,6 +79,11 @@ public class Rsp<T> implements Serializable {
         return new Rsp<T>().code(RspCode.FAIL.getCode()).msg(RspCode.FAIL.getMsg())
                 .businessInfo(BusinessInfo.builder().resultCode(resultCode).resultMsg(resultMsg).build())
                 .data(data).exception(e);
+    }
+
+    public static <T> Rsp<T> error(BusinessExceptionEnums exceptionEnums) {
+        return new Rsp<T>().code(RspCode.FAIL.getCode()).msg(RspCode.FAIL.getMsg())
+                .businessInfo(BusinessInfo.builder().resultCode(exceptionEnums.getCode()).resultMsg(exceptionEnums.getMsg()).build());
     }
 
     public static <T> Rsp<T> ok() {

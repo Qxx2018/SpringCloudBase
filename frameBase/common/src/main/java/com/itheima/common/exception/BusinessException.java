@@ -1,6 +1,6 @@
 package com.itheima.common.exception;
 
-import com.itheima.common.enums.BusinessExceptionEnums;
+import com.itheima.sys.core.enums.BusinessExceptionEnums;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

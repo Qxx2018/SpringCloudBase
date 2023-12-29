@@ -2,7 +2,7 @@ package com.itheima.business.seckill.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.itheima.business.seckill.service.SecKillService;
-import com.itheima.common.vo.Rsp;
+import com.itheima.sys.core.resp.Rsp;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

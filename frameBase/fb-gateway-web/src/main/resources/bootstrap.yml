@@ -4,7 +4,7 @@ spring:
   profiles:
     active: dev
   application:
-    name: gateway-service
+    name: gateway-web
   cloud:
     #网关 开启
     gateway:

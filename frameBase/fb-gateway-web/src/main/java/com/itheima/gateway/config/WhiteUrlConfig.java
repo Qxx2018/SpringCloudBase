@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Data
 @Configuration
-@ConfigurationProperties("sc.white")
+@ConfigurationProperties("sc.white.gateway")
 public class WhiteUrlConfig {
 
     private List<String> urls;

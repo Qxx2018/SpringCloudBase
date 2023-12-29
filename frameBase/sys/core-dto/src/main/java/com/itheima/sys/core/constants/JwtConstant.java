@@ -1,10 +1,10 @@
-package com.itheima.oauth.certification.constants;
+package com.itheima.sys.core.constants;
 
 /**
  * JWT 常量类
  * @author XinXingQian
  */
-public class JwtConstants {
+public class JwtConstant {
     /**
      * 账户id
      */

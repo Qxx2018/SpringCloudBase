@@ -1,4 +1,4 @@
-package com.itheima.common.enums;
+package com.itheima.sys.core.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +14,16 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString(callSuper = true, includeFieldNames = true)
 public enum BusinessExceptionEnums {
+
+    /**
+     * token无效或过期
+     */
+    TOKEN_INVALID_OR_EXPIRED("2004","token无效或过期"),
+    /**
+     * 访问未授权
+     */
+    USER_ACCESS_UNAUTHORIZED("2006","访问未授权"),
+
     /**
      * 请求方法不支持
      */
@@ -38,6 +48,10 @@ public enum BusinessExceptionEnums {
      * 数据库异常
      */
     DATABASE_ERROR("700101","数据库异常"),
+    /**
+     * OAUTH2 异常
+     */
+    OAUTH2_ERROR("700301","OAUTH2 异常"),
     /**
      * 短信校验码不正确
      */

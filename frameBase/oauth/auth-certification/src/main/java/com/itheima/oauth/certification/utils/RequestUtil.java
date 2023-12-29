@@ -1,9 +1,9 @@
 package com.itheima.oauth.certification.utils;
 
 import cn.hutool.core.util.StrUtil;
-import com.itheima.common.constants.NumConstant;
-import com.itheima.common.enums.SpecialCharEnum;
-import com.itheima.oauth.certification.constants.RequestConstants;
+import com.itheima.sys.core.constants.NumConstant;
+import com.itheima.sys.core.enums.SpecialCharEnum;
+import com.itheima.sys.core.constants.RequestConstant;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.oauth2.common.exceptions.UnapprovedClientAuthenticationException;
@@ -23,8 +23,8 @@ public class RequestUtil {
      */
     public static String[] clientDetails(HttpServletRequest request) {
 
-        String basic = request.getHeader(RequestConstants.AUTHORIZATION);
-        if (StrUtil.isBlank(basic) || !basic.startsWith(RequestConstants.BASIC)) {
+        String basic = request.getHeader(RequestConstant.AUTHORIZATION);
+        if (StrUtil.isBlank(basic) || !basic.startsWith(RequestConstant.BASIC)) {
             throw new UnapprovedClientAuthenticationException("请求头中客户端信息为空");
         }
         return clientDetails(basic);
@@ -37,7 +37,7 @@ public class RequestUtil {
      */
     public static String[] clientDetails(String header) {
 
-        byte[] base64Token = header.substring(RequestConstants.BASIC.length()).getBytes(StandardCharsets.UTF_8);
+        byte[] base64Token = header.substring(RequestConstant.BASIC.length()).getBytes(StandardCharsets.UTF_8);
         byte[] decoded;
         try {
             decoded = Base64.decodeBase64(base64Token);

@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.itheima.common.constants.Constant;
+import com.itheima.sys.core.constants.Constant;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

@@ -11,11 +11,38 @@
     <packaging>jar</packaging>
     <artifactId>core-dto</artifactId>
 
+    <properties>
+        <hutool.version>5.8.15</hutool.version>
+        <fastjson.version>1.2.49</fastjson.version>
+    </properties>
+
     <dependencies>
+        <!-- hutool-all        -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <!-- fastjson       -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+            <scope>compile</scope>
+        </dependency>
         <!--  lombok      -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+        <!--  fasterxml.jackson      -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
     </dependencies>
 </project>

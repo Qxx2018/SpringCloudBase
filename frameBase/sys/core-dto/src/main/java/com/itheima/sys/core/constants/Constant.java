@@ -1,4 +1,4 @@
-package com.itheima.common.constants;
+package com.itheima.sys.core.constants;
 
 /**
  * 常量类

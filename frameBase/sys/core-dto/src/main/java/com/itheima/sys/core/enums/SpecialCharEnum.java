@@ -1,4 +1,4 @@
-package com.itheima.common.enums;
+package com.itheima.sys.core.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

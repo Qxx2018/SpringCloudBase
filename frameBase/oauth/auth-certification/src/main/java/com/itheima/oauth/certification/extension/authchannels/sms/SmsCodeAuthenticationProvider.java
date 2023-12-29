@@ -1,6 +1,6 @@
 package com.itheima.oauth.certification.extension.authchannels.sms;
 
-import com.itheima.common.enums.BusinessExceptionEnums;
+import com.itheima.sys.core.enums.BusinessExceptionEnums;
 import com.itheima.common.exception.BusinessException;
 import com.itheima.oauth.certification.business.impl.LoginCertificationServiceImpl;
 import com.itheima.oauth.certification.business.service.ValidateCodeService;

@@ -1,6 +1,6 @@
 package com.itheima.oauth.certification.dto;
 
-import com.itheima.common.enums.GenderEnum;
+import com.itheima.sys.core.enums.GenderEnum;
 import lombok.*;
 
 import java.io.Serializable;

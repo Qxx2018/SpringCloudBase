@@ -1,10 +1,10 @@
-package com.itheima.oauth.certification.constants;
+package com.itheima.sys.core.constants;
 
 /**
  * 请求常量
  * @author XinXingQian
  */
-public class RequestConstants {
+public class RequestConstant {
     /**
      * client_id
      */

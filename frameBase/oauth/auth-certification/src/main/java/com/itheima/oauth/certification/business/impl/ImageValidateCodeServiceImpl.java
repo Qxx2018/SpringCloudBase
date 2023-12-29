@@ -3,9 +3,9 @@ package com.itheima.oauth.certification.business.impl;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
 import com.itheima.common.utils.RedisUtil;
-import com.itheima.common.vo.Rsp;
+import com.itheima.sys.core.resp.Rsp;
 import com.itheima.oauth.certification.business.service.ImageValidateCodeService;
-import com.itheima.oauth.certification.constants.AuthConstants;
+import com.itheima.sys.core.constants.CacheConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +36,7 @@ public class ImageValidateCodeServiceImpl implements ImageValidateCodeService {
         CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(200, 100, 4, 20);
         // 重新生成code
         captcha.createCode();
-        redisUtil.hset(AuthConstants.IMG_LOGIN_CHECK_KEY,deviceId,captcha.getCode(),EXPIRE_TIME);
+        redisUtil.hset(CacheConstant.IMG_LOGIN_CHECK_KEY,deviceId,captcha.getCode(),EXPIRE_TIME);
         return Rsp.ok(captcha.getImageBase64Data());
     }
 }

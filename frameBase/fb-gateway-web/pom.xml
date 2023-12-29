@@ -17,6 +17,11 @@
         <hutool.version>5.8.15</hutool.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>com.itheima</groupId>
+            <artifactId>core-dto</artifactId>
+            <version>F-V1.0</version>
+        </dependency>
         <!--   webflux     -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -88,6 +93,15 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool.version}</version>
+        </dependency>
+        <!-- security-oauth2     -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-resource-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
         </dependency>
     </dependencies>
     <!--打包环境配置：开发环境、测试环境、正式环境-->

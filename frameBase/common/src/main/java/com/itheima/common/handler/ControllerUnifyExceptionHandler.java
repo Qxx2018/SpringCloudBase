@@ -1,7 +1,7 @@
 package com.itheima.common.handler;
 
-import com.itheima.common.enums.BusinessExceptionEnums;
-import com.itheima.common.vo.Rsp;
+import com.itheima.sys.core.enums.BusinessExceptionEnums;
+import com.itheima.sys.core.resp.Rsp;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
